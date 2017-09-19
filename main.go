@@ -18,6 +18,7 @@ import (
 	"github.com/jyap808/go-bittrex"
 	"github.com/jyap808/go-gemini"
 	"github.com/jyap808/go-poloniex"
+	"github.com/jyap808/ubq-tars-discord/textcmd"
 )
 
 // Variables used for command line parameters
@@ -405,7 +406,9 @@ func handleMessage(vals *string) *string {
 			break
 		}
 		message = *ubqUSD(&amount)
-
+	// Text commands
+	case "!ann", "!commands":
+		message = *textcmd.Commands(command)
 	case "!echo":
 		if len(arguments) == 0 {
 			message = "Usage: !echo [TEXT]"
