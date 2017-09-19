@@ -18,7 +18,7 @@ import (
 	"github.com/jyap808/go-bittrex"
 	"github.com/jyap808/go-gemini"
 	"github.com/jyap808/go-poloniex"
-	"github.com/jyap808/ubq-tars-discord/textcmd"
+	"github.com/ubiq/tars-discord/textcmd"
 )
 
 // Variables used for command line parameters
