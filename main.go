@@ -407,7 +407,7 @@ func handleMessage(vals *string) *string {
 		}
 		message = *ubqUSD(&amount)
 	// Text commands
-	case "!ann", "!commands":
+	case "!ann", "!commands", "!wallet":
 		message = *textcmd.Commands(command)
 	case "!echo":
 		if len(arguments) == 0 {

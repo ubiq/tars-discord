@@ -18,6 +18,8 @@ func Commands(command string) *string {
 		message += "*Ubiq specific*\n"
 		message += "`!ubqusd [AMOUNT]` - USD conversion\n"
 		message += "`!urls` - URLs\n"
+	case "!wallet":
+		message = "`Web:` https://pyrus.ubiqsmart.com `Web2:` https://myetherwallet.com `GUI:` https://github.com/ubiq/fusion/releases `CLI:` https://github.com/ubiq/go-ubiq/releases\n"
 	}
 
 	return &message
