@@ -15,6 +15,7 @@ func Commands(command string) *string {
 		message += "`!price [TICKER]` - Price look ups\n"
 		message += "`!lennyface` - "( ͡° ͜ʖ ͡°)"
 		message += "`!invite` - Discord Invite Link"
+		message += "`!hide / !hidechannels` - Tutorial on Hiding Discord Channels"
 		message += "\n"
 		message += "*Ubiq specific*\n"
 		message += "`!ubqusd [AMOUNT]` - USD conversion\n"
@@ -39,7 +40,9 @@ func Commands(command string) *string {
 	case "!website","!site":
 		message = "<http://ubiqsmart.com/>"
 	case "!explorer":
-		message = "`Explorer`: https://ubiqscan.io `Explorer 2`: http://www.ubiq.cc"		
+		message = "`Explorer`: https://ubiqscan.io `Explorer 2`: http://www.ubiq.cc"
+	case "!hide","!hidechannels":
+		message = "<https://support.discordapp.com/hc/en-us/articles/213599277-How-do-I-hide-channels->"
 	}
 
 	return &message
