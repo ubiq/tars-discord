@@ -15,6 +15,7 @@ func Commands(command string) *string {
 		message += "`!price [TICKER]` - Price look ups\n"
 		message += "`!invite` - Discord Invite Link\n"
 		message += "`!hide / !hidechannels` - Tutorial on Hiding Discord Channels\n"
+		message += "`!verify` - How to get Verified"
 		message += "\n"
 		message += "__**Ubiq specific**__\n\n"
 		message += "`!apx` - APX Ventures info\n"
@@ -23,7 +24,6 @@ func Commands(command string) *string {
 		message += "`!miner / !miners` - Mining Software\n"
 		message += "`!pool / !pools` - UBQ Pool List\n"
 		message += "`!ubqusd [AMOUNT]` - USD conversion\n"
-		message += "`!verify` - How to get Verified"
 		message += "`!website / !site` - UBQ Website\n"
 	case "!apx":
 		message = "`Channel:` #apx-ventures      `Website:` <http://apxv.org>     `Telegram:` <http://t.me/apxventures>     `Roadmap:` <https://drive.google.com/file/d/0ByqyVzIU5PtFLXp2UGZPcUFYd1U/view>\n"
