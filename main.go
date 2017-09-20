@@ -18,6 +18,7 @@ import (
 	"github.com/jyap808/go-bittrex"
 	"github.com/jyap808/go-gemini"
 	"github.com/jyap808/go-poloniex"
+	"github.com/ubiq/tars-discord/optionalchannelscmd"
 	"github.com/ubiq/tars-discord/textcmd"
 )
 
@@ -269,8 +270,9 @@ func btcPrice() *string {
 	return &message
 }
 
-func handleMessage(vals *string) *string {
+func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 
+	vals := &m.Content
 	valSplit := strings.Split(*vals, " ")
 	message := ""
 
@@ -280,6 +282,12 @@ func handleMessage(vals *string) *string {
 
 	command := valSplit[0]
 	arguments := valSplit[1:]
+
+	var optionalChannels = map[string]bool{
+		"decred-stakepool": true,
+		"music":            true,
+		"sports":           true,
+	}
 
 	switch command {
 	case "!price":
@@ -409,6 +417,36 @@ func handleMessage(vals *string) *string {
 	// Text commands
 	case "!ann", "!apx", "!commands", "!explorer", "!hide", "!hidechannels", "!invite", "!mine", "!miner", "!mining", "!pool", "!pools", "!site", "!wallet", "!website":
 		message = *textcmd.Commands(command)
+	case "!join":
+		usageStr := "Usage: !join [CHANNEL] eg. !join sports"
+
+		if len(arguments) == 0 {
+			message = usageStr
+			break
+		}
+
+		channel := strings.ToLower(arguments[0])
+
+		if optionalChannels[channel] {
+			message = *optionalchannelscmd.Join(s, m, channel)
+		} else {
+			message = usageStr
+		}
+	case "!leave":
+		usageStr := "Usage: !join [CHANNEL] eg. !leave sports"
+
+		if len(arguments) == 0 {
+			message = usageStr
+			break
+		}
+
+		channel := strings.ToLower(arguments[0])
+
+		if optionalChannels[channel] {
+			message = *optionalchannelscmd.Leave(s, m, channel)
+		} else {
+			message = usageStr
+		}
 	case "!echo":
 		if len(arguments) == 0 {
 			message = "Usage: !echo [TEXT]"
@@ -487,7 +525,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if len(m.Content) > 0 {
-		message := handleMessage(&m.Content)
+		message := handleMessage(s, m)
 		s.ChannelMessageSend(m.ChannelID, *message)
 	}
 }
