@@ -29,15 +29,15 @@ func Commands(command string) *string {
 	case "!lennyface":
 		message = "( ͡° ͜ʖ ͡°)"
 	case "!apx":
-		message = "`Channel:` #apx-ventures      `Website:` apxv.org     `Telegram:` t.me/apxventures     `Roadmap:` https://drive.google.com/file/d/0ByqyVzIU5PtFLXp2UGZPcUFYd1U/view"
+		message = "`Channel:` #apx-ventures      `Website:` apxv.org     `Telegram:` t.me/apxventures     `Roadmap:` <https://drive.google.com/file/d/0ByqyVzIU5PtFLXp2UGZPcUFYd1U/view>"
 	case "!invite":
-		message = "https://discord.gg/HF6vEGF"
+		message = "<https://discord.gg/HF6vEGF>"
 	case "!miner","!mine","!mining":
-		message = "https://bitcointalk.org/index.php?topic=1433925.0"
+		message = "<https://bitcointalk.org/index.php?topic=1433925.0>"
 	case "!pool","!pools":
 		message = "http://ubiq.allcanmine.net (CN)   http://ubiqminer.com   http://ubiqmine.ca   https://ubq.kwikpool.party   https://ubiqpool.io http://pool.ubq.tw    http://www.ubiq.cc/minerpool    https://ubiq.suprnova.cc       http://ubiq.minerpool.net    http://ubq.poolcoin.biz     http://mole-pool.net    https://ubiq.coin-miners.info     https://aikapool.com/ubiq/      http://ubq.pool.sexy    https://ubq.poolto.be    http://ubq.minertopia.org https://ubiq.hakopool.com    http://ubiq.epicpool.club    https://ubq.zet-tech.eu   http://ubiq.hodlpool.com"
 	case "!website","!site":
-		message = "http://ubiqsmart.com/"
+		message = "<http://ubiqsmart.com/>"
 	case "!explorer":
 		message = "`Explorer`: https://ubiqscan.io `Explorer 2`: http://www.ubiq.cc"		
 	}
