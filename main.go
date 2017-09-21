@@ -294,6 +294,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 	var optionalChannels = map[string]bool{
 		"decred-stakepool": true,
 		"music":            true,
+		"nsfw":             true,
 		"sports":           true,
 	}
 
