@@ -15,7 +15,7 @@ func Commands(command string) *string {
 		message += "`!price [TICKER]` - Price look ups\n"
 		message += "`!invite` - Discord Invite Link\n"
 		message += "`!hide / !hidechannels` - Tutorial on Hiding Discord Channels\n"
-		message += "`!verify` - How to get Verified"
+		message += "`!verify` - How to get Verified\n"
 		message += "\n"
 		message += "__**Ubiq specific**__\n\n"
 		message += "`!apx` - APX Ventures info\n"
@@ -37,13 +37,13 @@ func Commands(command string) *string {
 		message = "<https://bitcointalk.org/index.php?topic=1433925.0>\n"
 	case "!pool", "!pools":
 		message = "http://ubiq.allcanmine.net (CN)   http://ubiqminer.com   http://ubiqmine.ca   https://ubq.kwikpool.party   https://ubiqpool.io http://pool.ubq.tw    http://www.ubiq.cc/minerpool    https://ubiq.suprnova.cc       http://ubiq.minerpool.net    http://ubq.poolcoin.biz     http://mole-pool.net    https://ubiq.coin-miners.info     https://aikapool.com/ubiq/      http://ubq.pool.sexy    https://ubq.poolto.be    http://ubq.minertopia.org https://ubiq.hakopool.com    http://ubiq.epicpool.club    https://ubq.zet-tech.eu   http://ubiq.hodlpool.com\n"
-	case "!verify","!verified":
+	case "!verify", "!verified":
 		message = "__**Verified**__"
 		message += "\n"
-		message += "You can request to be #verified in the #general channel. this allows us to see who is a community member\n"
-		message += "a) mention your user name from Slack\n"
-		message += "b) only people with a profile pic get Verified\n"
-		message += "c) once Verified, you are then added to the private #verified channel and other previously hidden channels"
+		message += "You can request to be #verified in the #general channel. This allows us to see who is a community member\n"
+		message += "a) Mention your user name from Slack\n"
+		message += "b) Only people with a profile pic get Verified\n"
+		message += "c) Once Verified, you are then added to the private #verified channel and other previously hidden channels"
 	case "!wallet":
 		message = "`Web:` <https://pyrus.ubiqsmart.com> `Web2:` <https://myetherwallet.com> `GUI:` <https://github.com/ubiq/fusion/releases> `CLI:` <https://github.com/ubiq/go-ubiq/releases>\n"
 	case "!website", "!site":

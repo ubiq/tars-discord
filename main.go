@@ -415,7 +415,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		}
 		message = *ubqUSD(&amount)
 	// Text commands
-	case "!ann", "!apx", "!commands", "!explorer", "!hide", "!hidechannels", "!invite", "!mine", "!miner", "!mining", "!pool", "!pools", "!site", "!verified", "!verify" , "!wallet", "!website":
+	case "!ann", "!apx", "!commands", "!explorer", "!hide", "!hidechannels", "!invite", "!mine", "!miner", "!mining", "!pool", "!pools", "!site", "!verified", "!verify", "!wallet", "!website":
 		message = *textcmd.Commands(command)
 	case "!join":
 		usageStr := "Usage: !join [CHANNEL] eg. !join sports"
