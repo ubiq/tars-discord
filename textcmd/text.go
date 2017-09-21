@@ -9,7 +9,7 @@ func Commands(command string) *string {
 	case "!ann":
 		message = "`BitcoinTalk ANN:` <https://bitcointalk.org/index.php?topic=1763606.0>\n"
 	case "!commands":
-		message = "Here are some custom Ubiq Slack commands\n"
+		message = "Here are some custom Ubiq Discord commands\n"
 		message += "\n"
 		message += "__**General**__\n\n"
 		message += "`!price [TICKER]` - Price look ups\n"
@@ -19,24 +19,33 @@ func Commands(command string) *string {
 		message += "\n"
 		message += "__**Ubiq specific**__\n\n"
 		message += "`!apx` - APX Ventures info\n"
-		message += "`!explorer` - UBQ Block Explorer\n"
+		message += "`!exchange / !market` - Ubiq exchanges\n"
+		message += "`!explorer` - Ubiq Block Explorer\n"
 		message += "`!hide` - How to Hide Channels\n"
-		message += "`!miner / !miners` - Mining Software\n"
-		message += "`!pool / !pools` - UBQ Pool List\n"
+		message += "`!miner` - Mining Software\n"
+		message += "`!onepage` - Ubiq in one page"
+		message += "`!pool` - Ubiq Pool List\n"
+		message += "`!stats` - Ubiq network stats\n"
 		message += "`!ubqusd [AMOUNT]` - USD conversion\n"
-		message += "`!website / !site` - UBQ Website\n"
+		message += "`!website / !site` - Ubiq Website\n"
 	case "!apx":
 		message = "`Channel:` #apx-ventures      `Website:` <http://apxv.org>     `Telegram:` <http://t.me/apxventures>     `Roadmap:` <https://drive.google.com/file/d/0ByqyVzIU5PtFLXp2UGZPcUFYd1U/view>\n"
+	case "!exchange", "!market":
+		message = "`Bittrex:` https://bittrex.com/Market/Index?MarketName=BTC-UBQ `Cryptopia:` https://www.cryptopia.co.nz/Exchange/?market=UBQ_BTC `Litebit:` https://www.litebit.eu/en/buy/ubiq\n"
 	case "!explorer":
 		message = "`Explorer`: <https://ubiqscan.io> `Explorer 2`: <http://www.ubiq.cc>\n"
 	case "!hide", "!hidechannels":
 		message = "<https://support.discordapp.com/hc/en-us/articles/213599277-How-do-I-hide-channels->\n"
 	case "!invite":
 		message = "<https://discord.gg/HF6vEGF>\n"
-	case "!miner", "!mine", "!mining":
+	case "!miner":
 		message = "<https://bitcointalk.org/index.php?topic=1433925.0>\n"
-	case "!pool", "!pools":
+	case "!onepage":
+		message = "<https://medium.com/the-ubiq-report/ubiq-in-one-page-3e3d335064fc>\n"
+	case "!pool":
 		message = "http://ubiq.allcanmine.net (CN)   http://ubiqminer.com   http://ubiqmine.ca   https://ubq.kwikpool.party   https://ubiqpool.io http://pool.ubq.tw    http://www.ubiq.cc/minerpool    https://ubiq.suprnova.cc       http://ubiq.minerpool.net    http://ubq.poolcoin.biz     http://mole-pool.net    https://ubiq.coin-miners.info     https://aikapool.com/ubiq/      http://ubq.pool.sexy    https://ubq.poolto.be    http://ubq.minertopia.org https://ubiq.hakopool.com    http://ubiq.epicpool.club    https://ubq.zet-tech.eu   http://ubiq.hodlpool.com\n"
+	case "!stats":
+		message = "Ubiq network stats: <https://ubiq.darcr.us>\n"
 	case "!verify", "!verified":
 		message = "__**Verified**__"
 		message += "\n"
