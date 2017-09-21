@@ -270,6 +270,14 @@ func btcPrice() *string {
 	return &message
 }
 
+func KeysString(m map[string]bool) string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	return strings.Join(keys, ", ")
+}
+
 func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 
 	vals := &m.Content
@@ -418,7 +426,8 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 	case "!ann", "!apx", "!commands", "!explorer", "!hide", "!hidechannels", "!invite", "!mine", "!miner", "!mining", "!pool", "!pools", "!site", "!verified", "!verify", "!wallet", "!website":
 		message = *textcmd.Commands(command)
 	case "!join":
-		usageStr := "Usage: !join [CHANNEL] eg. !join sports"
+		usageStr := "**Usage:** !join [CHANNEL]\n\n"
+		usageStr += fmt.Sprintf("**Optional Channels:** %s", KeysString(optionalChannels))
 
 		if len(arguments) == 0 {
 			message = usageStr
@@ -433,7 +442,8 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 			message = usageStr
 		}
 	case "!leave":
-		usageStr := "Usage: !join [CHANNEL] eg. !leave sports"
+		usageStr := "**Usage:** !leave [CHANNEL]\n\n"
+		usageStr += fmt.Sprintf("**Optional Channels:** %s", KeysString(optionalChannels))
 
 		if len(arguments) == 0 {
 			message = usageStr
