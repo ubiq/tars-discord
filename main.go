@@ -427,7 +427,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 	case "!ann", "!apx", "!commands", "!explorer", "!hide", "!hidechannels", "!invite", "!mine", "!miner", "!mining", "!pool", "!pools", "!site", "!verified", "!verify", "!wallet", "!website":
 		message = *textcmd.Commands(command)
 	case "!join":
-		usageStr := "**Usage:** !join [CHANNEL]\n\n"
+		usageStr := "**Usage:** !join [OPTIONAL_CHANNEL]\n\n"
 		usageStr += fmt.Sprintf("**Optional Channels:** %s", KeysString(optionalChannels))
 
 		if len(arguments) == 0 {
@@ -443,7 +443,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 			message = usageStr
 		}
 	case "!leave":
-		usageStr := "**Usage:** !leave [CHANNEL]\n\n"
+		usageStr := "**Usage:** !leave [OPTIONAL_CHANNEL]\n\n"
 		usageStr += fmt.Sprintf("**Optional Channels:** %s", KeysString(optionalChannels))
 
 		if len(arguments) == 0 {
