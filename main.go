@@ -426,7 +426,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		message = *ubqUSD(&amount)
 	// Text commands
 	// Keep this in alphabetical order. Where possible just use the singular term.
-	case "!ann", "!apx", "!backup", "!commands", "!exchange", "!explorer", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nucleus", "!onepage", "!pool", "!quarterly", "!roadmap", "!site", "!stats", "!transparency", "!verified", "!verify", "!wallet", "!website":
+	case "!ann", "!apx", "!backup", "!caps", "!commands", "!exchange", "!explorer", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nucleus", "!onepage", "!pool", "!quarterly", "!roadmap", "!site", "!solidity", "!stats", "!transparency", "!verified", "!verify", "!wallet", "!website":
 		message = *textcmd.Commands(command)
 	case "!join":
 		usageStr := "**Usage:** !join [OPTIONAL_CHANNEL]\n\n"
