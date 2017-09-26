@@ -20,7 +20,9 @@ func Commands(command string) *string {
 		message += "__**Ubiq specific**__\n\n"
 		message += "`!apx` - APX Ventures info\n"
 		message += "`!backup` - Backup your account\n"
+		message += "`!bots` - Ubiq Twitter bots\n"
 		message += "`!caps` - Correct spelling for Ubiq\n"
+		message += "`!compare` - Comparison chart\n"
 		message += "`!exchange / !market` - Ubiq exchanges\n"
 		message += "`!explorer` - Ubiq Block Explorer\n"
 		message += "`!hide` - How to Hide Channels\n"
@@ -29,17 +31,28 @@ func Commands(command string) *string {
 		message += "`!nucleus / !transparency` - Nucleus Transparency Report\n"
 		message += "`!onepage` - Ubiq in one page"
 		message += "`!pool` - Ubiq Pool List\n"
+		message += "`!resettabs / !blank` - Reset tabs in Fusion\n"
 		message += "`!roadmap / !quarterly` - Roadmap and Quarterly report\n"
-		message += "`!solidity` - Solidity documentation\n"
+		message += "`!social` - Ubiq social media links\n"
 		message += "`!stats` - Ubiq network stats\n"
 		message += "`!ubqusd [AMOUNT]` - USD conversion\n"
 		message += "`!website / !site` - Ubiq Website\n"
+		message += "\n"
+		message += "__**Programming**__\n\n"
+		message += "`!ethunits` - Ethereum units\n"
+		message += "`!solidity` - Solidity documentation\n"
 	case "!apx":
 		message = "`Channel:` #apx-ventures      `Website:` <http://apxv.org>     `Telegram:` <http://t.me/apxventures>     `Roadmap:` <https://drive.google.com/file/d/0ByqyVzIU5PtFLXp2UGZPcUFYd1U/view>\n"
 	case "!backup":
 		message = "To backup your wallet file(s), save every file in the following directories: Mac: `~/Library/Ubiq/keystore` Linux: `~/.ubiq/keystore` Windows: `%APPDATA%/Ubiq/keystore` *Note that each time you create a new account a new file will be created, so you must back up the new file in that directory when you create a new account.* The following video will help you on Windows: https://www.youtube.com/watch?v=x5tNtKpnkMw\n"
+	case "!bots":
+		message = "`Ubiq new coin bot:` <https://twitter.com/ubiqcoinbot> `Ubiq BCT ANN bot:` <https://twitter.com/ubiqannbot>\n"
 	case "!caps":
 		message = "The correct spelling for Ubiq is 'Ubiq', not all capitals (UBIQ is incorrect). This is similar to Nike where the logo is in all capitals but not the name. The ticker symbol for Ubiq is UBQ.\n"
+	case "!compare":
+		message = "`Comparison chart provided by user moreexplosions:` http://imgur.com/a/0SZnr"
+	case "!ethunits":
+		message = "`Ethereum units:` <https://github.com/ryepdx/ethereum-units>\n"
 	case "!exchange", "!market":
 		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Cryptopia:` <https://www.cryptopia.co.nz/Exchange/?market=UBQ_BTC `Litebit:` https://www.litebit.eu/en/buy/ubiq>\n"
 	case "!explorer":
@@ -58,8 +71,12 @@ func Commands(command string) *string {
 		message = "`Ubiq in one page`: <https://medium.com/the-ubiq-report/ubiq-in-one-page-3e3d335064fc>\n"
 	case "!pool":
 		message = "`Ubiq mining pools:` http://ubiq.allcanmine.net (CN)   http://ubiqminer.com   http://ubiqmine.ca   https://ubq.kwikpool.party   https://ubiqpool.io http://pool.ubq.tw    http://www.ubiq.cc/minerpool    https://ubiq.suprnova.cc       http://ubiq.minerpool.net    http://ubq.poolcoin.biz     http://mole-pool.net    https://ubiq.coin-miners.info     https://aikapool.com/ubiq/      http://ubq.pool.sexy    https://ubq.poolto.be    http://ubq.minertopia.org https://ubiq.hakopool.com    http://ubiq.epicpool.club    https://ubq.zet-tech.eu   http://ubiq.hodlpool.com\n"
+	case "!resettabs,!blank":
+		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
-		message = "`Roadmap and quarterly report:` `August:` https://medium.com/the-ubiq-report/ubiq-quarterly-report-august-2017-e6484a536b8d `May:` https://medium.com/the-ubiq-report/ubiq-quarterly-report-10-5-2017-9750e297330f\n"
+		message = "`Roadmap and quarterly report:` `August:` <https://medium.com/the-ubiq-report/ubiq-quarterly-report-august-2017-e6484a536b8d> `May:` <https://medium.com/the-ubiq-report/ubiq-quarterly-report-10-5-2017-9750e297330f>\n"
+	case "!social":
+		message = "Follow us on social media `Medium:` <https://blog.ubiqsmart.com> `Twitter:` <https://twitter.com/ubiqsmart> `YouTube:` <https://www.youtube.com/ubiqvideos> `Reddit:` <https://www.reddit.com/r/Ubiq/> `GitHub:` <https://github.com/ubiq> `BitcoinTalk:` <https://bitcointalk.org/index.php?topic=1763606.0> `Telegram:` <https://t.me/Ubiqsmart> `Wikipedia:` <https://en.wikipedia.org/wiki/Ubiq>\n"
 	case "!solidity":
 		message = "`Solidity documentation:` <http://solidity.readthedocs.io>\n"
 	case "!stats":
