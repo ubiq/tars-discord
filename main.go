@@ -296,6 +296,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		"decred-stakepool": true,
 		"music":            true,
 		"nsfw":             true,
+		"russia":           true,
 		"sports":           true,
 	}
 

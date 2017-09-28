@@ -11,6 +11,7 @@ var channels = map[string]string{
 	"decred-stakepool": "360173511538638859",
 	"music":            "359986790217678848",
 	"nsfw":             "360239464884469760",
+	"russia":           "363038830502215693",
 	"sports":           "360144092832989184",
 }
 
