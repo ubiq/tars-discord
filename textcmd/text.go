@@ -54,7 +54,7 @@ func Commands(command string) *string {
 	case "!ethunits":
 		message = "`Ethereum units:` <https://github.com/ryepdx/ethereum-units>\n"
 	case "!exchange", "!market":
-		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Cryptopia:` <https://www.cryptopia.co.nz/Exchange/?market=UBQ_BTC `Litebit:` https://www.litebit.eu/en/buy/ubiq>\n"
+		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Cryptopia:` <https://www.cryptopia.co.nz/Exchange/?market=UBQ_BTC> `Litebit:` <https://www.litebit.eu/en/buy/ubiq>\n"
 	case "!explorer":
 		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <http://www.ubiq.cc>\n"
 	case "!hide", "!hidechannels":
