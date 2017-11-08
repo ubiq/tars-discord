@@ -117,6 +117,37 @@ func ubqUSD(amount *float64) *string {
 	return &message
 }
 
+func ubqLAMBO() *string {
+	message := ""
+	
+	// Bittrex lookup
+	bittrex := bittrex.New(bittrex_api_key, bittrex_api_secret)
+	upperTicker := "UBQ"
+	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
+	ticker, err := bittrex.GetTicker(tickerName)
+	
+	// BTC lookup
+	gemini := gemini.New(gemini_api_key, gemini_api_secret)
+	btcTickerName := "btcusd"
+	btcTicker, err := gemini.GetTicker(btcTickerName)
+	
+	if err != nil {
+		log.Println(err)
+		message = "Error retrieving price from remote API's"
+		return &message
+	}
+	
+	btcPrice := btcTicker.Last
+	
+	usdValue := *amount * ticker.Ask * btcPrice
+	
+	lamboValue := 300000 / usdValue
+	
+	message = fmt.Sprintf("```You would need about %.0f UBQ to buy a lambo.```", lamboValue)
+	
+	return &message
+}
+
 func initializeBittrex(db *bolt.DB) (err error) {
 	// Initial Bittrex table with data
 
@@ -425,6 +456,8 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 			break
 		}
 		message = *ubqUSD(&amount)
+	case: "!ubqlambo":
+		message = *ubqLAMBO()
 	// Text commands
 	// Keep this in alphabetical order. Where possible just use the singular term.
 	case "!ann", "!apx", "!backup", "!blank", "!bots", "!caps", "!commands", "!compare", "!ethunits", "!exchange", "!explorer", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nucleus", "!onepage", "!pool", "!quarterly", "!resettabs", "!roadmap", "!site", "!social", "!solidity", "!stats", "!transparency", "!verified", "!verify", "!wallet", "!website":
