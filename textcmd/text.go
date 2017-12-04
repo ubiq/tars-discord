@@ -66,15 +66,15 @@ func Commands(command string) *string {
 	case "!mp", "!monetarypolicy":
 		message = "`Monetary policy and mining block rewards scheme in Ubiq:` https://bitcointalk.org/index.php?topic=1631210.msg17590755#msg17590755\n"
 	case "!nucleus", "!transparency":
-		message = "`Nucleus Transparency Report:` <https://medium.com/the-ubiq-report/nucleus-transparency-report-6496e444bd85>\n"
+		message = "`Nucleus Transparency Report:` <https://blog.ubiqsmart.com/nucleus-transparency-report-6496e444bd85>\n"
 	case "!onepage":
-		message = "`Ubiq in one page`: <https://medium.com/the-ubiq-report/ubiq-in-one-page-3e3d335064fc>\n"
+		message = "`Ubiq in one page`: <https://blog.ubiqsmart.com/ubiq-in-one-page-3e3d335064fc>\n"
 	case "!pool":
 		message = "`Ubiq mining pools:` http://ubiq.allcanmine.net (CN)   http://ubiqminer.com   http://ubiq.minethis.ca/   https://ubq.kwikpool.party   https://ubiqpool.io http://pool.ubq.tw    http://www.ubiq.cc/minerpool    https://ubiq.suprnova.cc       http://ubiq.minerpool.net    http://ubq.poolcoin.biz     http://mole-pool.net    https://ubiq.coin-miners.info     https://aikapool.com/ubiq/      http://ubq.pool.sexy    https://ubq.poolto.be    http://ubq.minertopia.org https://ubiq.hakopool.com    http://ubiq.epicpool.club    https://ubq.zet-tech.eu   http://ubiq.hodlpool.com\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
-		message = "`Roadmap and quarterly report:` `August:` <https://medium.com/the-ubiq-report/ubiq-quarterly-report-august-2017-e6484a536b8d> `May:` <https://medium.com/the-ubiq-report/ubiq-quarterly-report-10-5-2017-9750e297330f>\n"
+		message = "`Roadmap and quarterly report:` `November:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-november-2017-2acc66750490> `August:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-august-2017-e6484a536b8d> `May:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-10-5-2017-9750e297330f>\n"
 	case "!social":
 		message = "Follow us on social media `Medium:` <https://blog.ubiqsmart.com> `Twitter:` <https://twitter.com/ubiqsmart> `YouTube:` <https://www.youtube.com/ubiqvideos> `Reddit:` <https://www.reddit.com/r/Ubiq/> `GitHub:` <https://github.com/ubiq> `BitcoinTalk:` <https://bitcointalk.org/index.php?topic=1763606.0> `Telegram:` <https://t.me/Ubiqsmart> `Wikipedia:` <https://en.wikipedia.org/wiki/Ubiq>\n"
 	case "!solidity":
