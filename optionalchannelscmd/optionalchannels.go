@@ -9,6 +9,7 @@ import (
 var channels = map[string]string{
 	"china":            "360684832558415873",
 	"decred-stakepool": "360173511538638859",
+	"korea":            "389345996938936320",
 	"music":            "359986790217678848",
 	"nsfw":             "360239464884469760",
 	"russia":           "363038830502215693",
