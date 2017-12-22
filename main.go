@@ -326,6 +326,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 	var optionalChannels = map[string]bool{
 		"china":            true,
 		"decred-stakepool": true,
+		"gamers":           true,
 		"korea":            true,
 		"music":            true,
 		"nsfw":             true,
