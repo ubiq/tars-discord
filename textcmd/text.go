@@ -56,7 +56,7 @@ func Commands(command string) *string {
 	case "!exchange", "!market":
 		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Cryptopia:` <https://www.cryptopia.co.nz/Exchange/?market=UBQ_BTC> `Litebit:` <https://www.litebit.eu/en/buy/ubiq> `UPBit:` <https://upbit.com/exchange?code=CRIX.UPBIT.BTC-UBQ>\n"
 	case "!explorer":
-		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <http://www.ubiq.cc>\n"
+		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <http://www.ubiq.cc> `Explorer 3:` <https://ubiqexplorer.com>\n"
 	case "!hide", "!hidechannels":
 		message = "<https://support.discordapp.com/hc/en-us/articles/213599277-How-do-I-hide-channels->\n"
 	case "!invite":
