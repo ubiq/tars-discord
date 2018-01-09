@@ -10,6 +10,9 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	"net/http"
+	"encoding/json"
+	"io/ioutil"
 
 	"github.com/boltdb/bolt"
 	"github.com/bwmarrin/discordgo"
@@ -36,6 +39,8 @@ var (
 	appHomeDir        = dcrutil.AppDataDir("ubq-tars-discord", false)
 	defaultBoldDBFile = filepath.Join(appHomeDir, "exchange_pairs.db")
 	defaultConfigFile = filepath.Join(appHomeDir, "secrets.env")
+
+	hClient = &http.Client{Timeout: 8 * time.Second}
 )
 
 func poloPrice(vals *string) *string {
@@ -86,6 +91,58 @@ func trexPrice(vals *string) *string {
 	}
 
 	return &message
+}
+
+func getUSDto(fiat string) float64{
+    r, err := hClient.Get("https://api.fixer.io/latest?base=USD")
+    if err != nil {
+		log.Fatal(err)
+		return -1.0;
+    }
+	b, readErr := ioutil.ReadAll(r.Body)
+	if readErr != nil {
+        log.Fatal(readErr)
+        return -1.0;
+    }
+    defer r.Body.Close()
+	var f interface{}
+	json.Unmarshal([]byte(b), &f)
+	return f.(map[string]interface{})["rates"].(map[string]interface{})[fiat].(float64)
+}
+
+func ubqEUR(amount *float64) *string {
+	message := ""
+	fiatErrMessage := "Error retrieving fiat conversion from remote API's"
+
+	// Bittrex lookup
+	bittrex := bittrex.New(bittrex_api_key, bittrex_api_secret)
+	upperTicker := "UBQ"
+	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
+	ticker, err := bittrex.GetTicker(tickerName)
+
+	// BTC lookup
+	gemini := gemini.New(gemini_api_key, gemini_api_secret)
+	btcTickerName := "btcusd"
+	btcTicker, err := gemini.GetTicker(btcTickerName)
+
+	if err != nil {
+		log.Println(err)
+		message = "Error retrieving price from remote API's"
+		return &message
+	}
+
+	btcPrice := btcTicker.Last
+
+	// Euro lookup
+	usdeur := getUSDto("EUR")
+
+	if(usdeur < 0.0){
+		return &fiatErrMessage
+	}else{
+		usdValue := *amount * ticker.Ask * btcPrice * usdeur
+		message = fmt.Sprintf("```%.1f UBQ = €%.3f EUR```", *amount, usdValue)
+		return &message
+	}
 }
 
 func ubqUSD(amount *float64) *string {
@@ -459,6 +516,24 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 			break
 		}
 		message = *ubqUSD(&amount)
+	case "!ubqeur":
+		usageStr := "Usage: !ubqeur [AMOUNT] eg. !ubqeur 10"
+		valueErrStr := fmt.Sprintf("Value error ;_; - %s", usageStr)
+		if len(arguments) < 1 {
+			message = usageStr
+			break
+		}
+
+		amount, err := strconv.ParseFloat(arguments[0], 64)
+		if err != nil {
+			message = valueErrStr
+			break
+		}
+		if amount < 0.1 || amount > 100000000 {
+			message = "ERR: Pick an amount greater than 0.1 an less than 100 million"
+			break
+		}
+		message = *ubqEUR(&amount)
 	case "!ubqlambo":
 		message = *ubqLambo()
 	// Text commands
