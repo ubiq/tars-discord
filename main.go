@@ -139,8 +139,8 @@ func ubqEUR(amount *float64) *string {
 	if(usdeur < 0.0){
 		return &fiatErrMessage
 	}else{
-		usdValue := *amount * ticker.Ask * btcPrice * usdeur
-		message = fmt.Sprintf("```%.1f UBQ = €%.3f EUR```", *amount, usdValue)
+		eurValue := *amount * ticker.Ask * btcPrice * usdeur
+		message = fmt.Sprintf("```%.1f UBQ = €%.3f EUR```", *amount, eurValue)
 		return &message
 	}
 }
