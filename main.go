@@ -10,9 +10,6 @@ import (
 	"strings"
 	"syscall"
 	"time"
-	"net/http"
-	"encoding/json"
-	"io/ioutil"
 
 	"github.com/boltdb/bolt"
 	"github.com/bwmarrin/discordgo"
@@ -21,6 +18,7 @@ import (
 	"github.com/jyap808/go-bittrex"
 	"github.com/jyap808/go-gemini"
 	"github.com/jyap808/go-poloniex"
+	"github.com/jpatel888/go-bitstamp"
 	"github.com/ubiq/tars-discord/optionalchannelscmd"
 	"github.com/ubiq/tars-discord/textcmd"
 )
@@ -39,8 +37,6 @@ var (
 	appHomeDir        = dcrutil.AppDataDir("ubq-tars-discord", false)
 	defaultBoldDBFile = filepath.Join(appHomeDir, "exchange_pairs.db")
 	defaultConfigFile = filepath.Join(appHomeDir, "secrets.env")
-
-	hClient = &http.Client{Timeout: 8 * time.Second}
 )
 
 func poloPrice(vals *string) *string {
@@ -93,23 +89,6 @@ func trexPrice(vals *string) *string {
 	return &message
 }
 
-func getUSDto(fiat string) float64{
-    r, err := hClient.Get("https://api.fixer.io/latest?base=USD")
-    if err != nil {
-		log.Fatal(err)
-		return -1.0;
-    }
-	b, readErr := ioutil.ReadAll(r.Body)
-	if readErr != nil {
-        log.Fatal(readErr)
-        return -1.0;
-    }
-    defer r.Body.Close()
-	var f interface{}
-	json.Unmarshal([]byte(b), &f)
-	return f.(map[string]interface{})["rates"].(map[string]interface{})[fiat].(float64)
-}
-
 func ubqEUR(amount *float64) *string {
 	message := ""
 	fiatErrMessage := "Error retrieving fiat conversion from remote API's"
@@ -121,25 +100,21 @@ func ubqEUR(amount *float64) *string {
 	ticker, err := bittrex.GetTicker(tickerName)
 
 	// BTC lookup
-	gemini := gemini.New(gemini_api_key, gemini_api_secret)
-	btcTickerName := "btcusd"
-	btcTicker, err := gemini.GetTicker(btcTickerName)
+	bitstamp := bitstamp.New()
+	btcTickerName := "btceur"
+	btcTicker, err := bitstamp.GetTicker(btcTickerName)
 
 	if err != nil {
 		log.Println(err)
-		message = "Error retrieving price from remote API's"
-		return &message
+		return &fiatErrMessage
 	}
 
 	btcPrice := btcTicker.Last
 
-	// Euro lookup
-	usdeur := getUSDto("EUR")
-
-	if(usdeur < 0.0){
+	if(btcPrice == 0){
 		return &fiatErrMessage
 	}else{
-		eurValue := *amount * ticker.Ask * btcPrice * usdeur
+		eurValue := *amount * ticker.Ask * btcPrice
 		message = fmt.Sprintf("```%.1f UBQ = €%.3f EUR```", *amount, eurValue)
 		return &message
 	}
