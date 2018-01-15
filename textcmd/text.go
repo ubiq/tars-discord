@@ -36,6 +36,7 @@ func Commands(command string) *string {
 		message += "`!social` - Ubiq social media links\n"
 		message += "`!stats` - Ubiq network stats\n"
 		message += "`!ubqusd [AMOUNT]` - USD conversion\n"
+		message += "`!ubqeur [AMOUNT]` - EUR conversion\n"
 		message += "`!website / !site` - Ubiq Website\n"
 		message += "\n"
 		message += "__**Programming**__\n\n"
