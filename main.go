@@ -15,10 +15,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/decred/dcrutil"
 	"github.com/joho/godotenv"
+	"github.com/jpatel888/go-bitstamp"
 	"github.com/jyap808/go-bittrex"
 	"github.com/jyap808/go-gemini"
 	"github.com/jyap808/go-poloniex"
-	"github.com/jpatel888/go-bitstamp"
 	"github.com/ubiq/tars-discord/optionalchannelscmd"
 	"github.com/ubiq/tars-discord/textcmd"
 )
@@ -111,9 +111,9 @@ func ubqEUR(amount *float64) *string {
 
 	btcPrice := btcTicker.Last
 
-	if(btcPrice == 0){
+	if btcPrice == 0 {
 		return &fiatErrMessage
-	}else{
+	} else {
 		eurValue := *amount * ticker.Ask * btcPrice
 		message = fmt.Sprintf("```%.1f UBQ = €%.3f EUR```", *amount, eurValue)
 		return &message
