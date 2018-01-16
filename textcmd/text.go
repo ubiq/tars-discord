@@ -35,6 +35,7 @@ func Commands(command string) *string {
 		message += "`!roadmap / !quarterly` - Roadmap and Quarterly report\n"
 		message += "`!social` - Ubiq social media links\n"
 		message += "`!stats` - Ubiq network stats\n"
+		message += "`!ubqeur [AMOUNT]` - EUR conversion\n"
 		message += "`!ubqusd [AMOUNT]` - USD conversion\n"
 		message += "`!website / !site` - Ubiq Website\n"
 		message += "\n"
@@ -70,7 +71,7 @@ func Commands(command string) *string {
 	case "!onepage":
 		message = "`Ubiq in one page`: <https://blog.ubiqsmart.com/ubiq-in-one-page-3e3d335064fc>\n"
 	case "!pool":
-		message = "`Ubiq mining pools:` http://ubiq.allcanmine.net (CN)   http://ubiqminer.com   http://ubiq.minethis.ca/   https://ubq.kwikpool.party   https://ubiqpool.io http://pool.ubq.tw    http://www.ubiq.cc/minerpool    https://ubiq.suprnova.cc       http://ubiq.minerpool.net    http://ubq.poolcoin.biz     http://mole-pool.net    https://ubiq.coin-miners.info     https://aikapool.com/ubiq/      http://ubq.pool.sexy    https://ubq.poolto.be    http://ubq.minertopia.org https://ubiq.hakopool.com    http://ubiq.epicpool.club    https://ubq.zet-tech.eu   http://ubiq.hodlpool.com\n"
+		message = "`Ubiq mining pools:`<https://ubiqpool.io>    <http://pool.ubq.tw>    <http://www.ubiq.cc/minerpool>    <https://ubiq.suprnova.cc>    <http://ubiq.minerpool.net>    <http://ubq.poolcoin.biz>     <http://mole-pool.net>    <https://ubiq.coin-miners.info>     <https://aikapool.com/ubiq/>    <http://ubq.pool.sexy>    <https://ubq.poolto.be>    <http://ubq.minertopia.org>    <https://ubiq.hakopool.com>    <https://ubq.zet-tech.eu>    <http://ubiq.hodlpool.com>\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
