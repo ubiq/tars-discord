@@ -29,7 +29,7 @@ func Commands(command string) *string {
 		message += "`!miner` - Mining Software\n"
 		message += "`!mp / !monetarypolicy` - Monetary Policy\n"
 		message += "`!nucleus / !transparency` - Nucleus Transparency Report\n"
-		message += "`!onepage` - Ubiq in one page"
+		message += "`!onepage` - Ubiq in one page"\n"
 		message += "`!pool` - Ubiq Pool List\n"
 		message += "`!resettabs / !blank` - Reset tabs in Fusion\n"
 		message += "`!roadmap / !quarterly` - Roadmap and Quarterly report\n"
@@ -71,7 +71,7 @@ func Commands(command string) *string {
 	case "!onepage":
 		message = "`Ubiq in one page`: <https://blog.ubiqsmart.com/ubiq-in-one-page-3e3d335064fc>\n"
 	case "!pool":
-		message = "`Ubiq mining pools:` <https://ubqkings.com>    <https://ubiqpool.maxhash.org>    <https://ubiqpool.io>    <http://pool.ubq.tw>    <http://www.ubiq.cc/minerpool>    <https://ubiq.suprnova.cc>    <http://ubiq.minerpool.net>    <http://ubq.poolcoin.biz>     <http://mole-pool.net>    <https://ubiq.coin-miners.info>     <https://aikapool.com/ubiq/>    <http://ubq.pool.sexy>    <https://ubq.poolto.be>    <http://ubq.minertopia.org>    <https://ubiq.hakopool.com>    <https://ubq.zet-tech.eu>    <http://ubiq.hodlpool.com>\n"
+		message = "`Ubiq mining pools:` <http://ubiq.nevermining.org/>    <http://ubq.ehashcoins.org/>    <http://ubiq.miningpeon.net/><https://ubqkings.com>    <https://ubiqpool.maxhash.org>    <https://ubiqpool.io>    <http://pool.ubq.tw>    <http://www.ubiq.cc/minerpool>    <https://ubiq.suprnova.cc>    <http://ubiq.minerpool.net>    <http://ubq.poolcoin.biz>     <http://mole-pool.net>    <https://ubiq.coin-miners.info>     <https://aikapool.com/ubiq/>    <http://ubq.pool.sexy>    <https://ubq.poolto.be>    <http://ubq.minertopia.org>    <https://ubiq.hakopool.com>    <https://ubq.zet-tech.eu>    <http://ubiq.hodlpool.com>\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
