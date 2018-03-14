@@ -29,7 +29,7 @@ func Commands(command string) *string {
 		message += "`!miner` - Mining Software\n"
 		message += "`!mp / !monetarypolicy` - Monetary Policy\n"
 		message += "`!nucleus / !transparency` - Nucleus Transparency Report\n"
-		message += "`!onepage` - Ubiq in one page"\n"
+		message += "`!onepage` - Ubiq in one page\n"
 		message += "`!pool` - Ubiq Pool List\n"
 		message += "`!resettabs / !blank` - Reset tabs in Fusion\n"
 		message += "`!roadmap / !quarterly` - Roadmap and Quarterly report\n"
