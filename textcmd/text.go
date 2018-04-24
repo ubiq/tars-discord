@@ -23,6 +23,7 @@ func Commands(command string) *string {
 		message += "`!bots` - Ubiq Twitter bots\n"
 		message += "`!caps` - Correct spelling for Ubiq\n"
 		message += "`!compare` - Comparison chart\n"
+		message += "`!escher` - Escher contract info"
 		message += "`!exchange / !market` - Ubiq exchanges\n"
 		message += "`!explorer` - Ubiq Block Explorer\n"
 		message += "`!hide` - How to Hide Channels\n"
@@ -52,6 +53,8 @@ func Commands(command string) *string {
 		message = "The correct spelling for Ubiq is 'Ubiq', not all capitals (UBIQ is incorrect). This is similar to Nike where the logo is in all capitals but not the name. The ticker symbol for Ubiq is UBQ.\n"
 	case "!compare":
 		message = "`Comparison chart provided by user moreexplosions:` https://imgur.com/a/Kr8RW"
+	case "!escher":
+		message = "`Escher contract address:` 0xcf3222b7FDa7a7563b9E1E6C966Bead04AC23c36  - Use default ABI and default 18 decimals."
 	case "!ethunits":
 		message = "`Ethereum units:` <https://github.com/ryepdx/ethereum-units>\n"
 	case "!exchange", "!market":
