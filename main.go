@@ -535,7 +535,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		message = *ubqLambo()
 	// Text commands
 	// Keep this in alphabetical order. Where possible just use the singular term.
-	case "!ann", "!apx", "!backup", "!blank", "!bots", "!caps", "!commands", "!compare", "!ethunits", "!exchange", "!explorer", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nucleus", "!onepage", "!pool", "!quarterly", "!resettabs", "!roadmap", "!site", "!social", "!solidity", "!stats", "!transparency", "!verified", "!verify", "!wallet", "!website", "!shokku", "!vyper":
+	case "!ann", "!apx", "!backup", "!blank", "!bots", "!caps", "!commands", "!compare", "!escher", "!ethunits", "!exchange", "!explorer", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nucleus", "!onepage", "!pool", "!quarterly", "!resettabs", "!roadmap", "!site", "!social", "!solidity", "!stats", "!transparency", "!verified", "!verify", "!wallet", "!website", "!shokku", "!vyper":
 		message = *textcmd.Commands(command)
 	case "!join":
 		usageStr := "**Usage:** !join [OPTIONAL_CHANNEL]\n\n"
