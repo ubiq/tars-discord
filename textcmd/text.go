@@ -12,9 +12,10 @@ func Commands(command string) *string {
 		message = "Here are some custom Ubiq Discord commands\n"
 		message += "\n"
 		message += "__**General**__\n\n"
-		message += "`!price [TICKER]` - Price look ups\n"
-		message += "`!invite` - Ubiq Discord Invite Link\n"
 		message += "`!hide / !hidechannels` - Tutorial on Hiding Discord Channels\n"
+		message += "`!escrow` - Escrow caution message\n"
+		message += "`!invite` - Ubiq Discord Invite Link\n"
+		message += "`!price [TICKER]` - Price look ups\n"
 		message += "`!verify` - How to get Verified on Ubiq Discord\n"
 		message += "\n"
 		message += "__**Ubiq specific**__\n\n"
@@ -55,6 +56,8 @@ func Commands(command string) *string {
 		message = "`Comparison chart provided by user moreexplosions:` https://imgur.com/a/Kr8RW"
 	case "!escher":
 		message = "`Escher contract address:` 0xcf3222b7FDa7a7563b9E1E6C966Bead04AC23c36  - Use default ABI and default 18 decimals."
+	case "!escrow":
+		message = "`Caution:` When trading OTC directly between yourself and another user, there's a chance you may get scammed by the other party and lose your funds. Whenever making an OTC trade, _always_ use an escrow. A trusted escrow protects both parties during the trade. Contact Ubiq Discord moderators to arrange a trustworthy escrow for you."
 	case "!ethunits":
 		message = "`Ethereum units:` <https://github.com/ryepdx/ethereum-units>\n"
 	case "!exchange", "!market":
