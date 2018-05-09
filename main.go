@@ -16,7 +16,7 @@ import (
 
 	"github.com/boltdb/bolt"
 	"github.com/bwmarrin/discordgo"
-	"github.com/decred/dcrutil"
+	"github.com/decred/dcrd/dcrutil"
 	"github.com/joho/godotenv"
 	"github.com/jpatel888/go-bitstamp"
 	"github.com/jyap808/go-bittrex"
