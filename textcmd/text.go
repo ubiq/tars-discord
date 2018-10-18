@@ -71,7 +71,7 @@ func Commands(command string) *string {
 	case "!miner":
 		message = "`Claymore:` <https://bitcointalk.org/index.php?topic=1433925.0> `Phoenix:` <https://bitcointalk.org/index.php?topic=2647654.2080> `Ethminer:` <https://github.com/ethereum-mining/ethminer/releases>\n"
 	case "!mp", "!monetarypolicy":
-		message = "`Monetary policy and mining block rewards scheme in Ubiq:` https://bitcointalk.org/index.php?topic=1631210.msg17590755#msg17590755\n"
+		message = "`Monetary policy and mining block rewards scheme in Ubiq:` https://blog.ubiqsmart.com/ubiq-research-monetary-policy-2e27458983ec\n"
 	case "!nucleus", "!transparency":
 		message = "`Nucleus Transparency Report:` <https://blog.ubiqsmart.com/nucleus-transparency-report-6496e444bd85>\n"
 	case "!onepage":
