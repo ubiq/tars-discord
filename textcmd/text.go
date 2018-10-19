@@ -78,6 +78,7 @@ func Commands(command string) *string {
 		message = "`Ubiq in one page`: <https://blog.ubiqsmart.com/ubiq-in-one-page-3e3d335064fc>\n"
 	case "!pools":
 		message = "`List of known mining pools:`\n"
+		message += "<http://terrahash.cc>\n"
 		message += "<https://ubiqminers.com>            <https://ubiqpool.maxhash.org>    <http://ubiq.minerpool.net>     <http://ubiq.hodlpool.com>\n"
 		message += "<https://ubiq.suprnova.cc>           <https://ubiq.anorak.tech>              <https://ubqkings.com>            <http://www.ubiq.cc/minerpool/>\n"
 		message += "<https://aikapool.com/ubiq/>       <http://ubiq.nevermining.org>        <http://ubq.pool.sexy>              <https://ubiqpool.io>\n"
