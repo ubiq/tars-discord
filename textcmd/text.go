@@ -69,9 +69,9 @@ func Commands(command string) *string {
 	case "!invite":
 		message = "`Ubiq Discord invite link:` <https://discord.gg/HF6vEGF>\n"
 	case "!miner":
-		message = "`Claymore:` <https://bitcointalk.org/index.php?topic=1433925.0> `Phoenix:` <https://bitcointalk.org/index.php?topic=2647654.2080> `Ethminer:` <https://github.com/ethereum-mining/ethminer/releases>\n"
+		message = "`Ubqminer`: <https://github.com/ubiq/ubqminer/releases> `Claymore:` <https://bitcointalk.org/index.php?topic=1433925.0> `Phoenix:` <https://bitcointalk.org/index.php?topic=2647654.2080>\n"
 	case "!mp", "!monetarypolicy":
-		message = "`Monetary policy and mining block rewards scheme in Ubiq:` https://blog.ubiqsmart.com/ubiq-research-monetary-policy-2e27458983ec\n"
+		message = "`Monetary policy and mining block rewards scheme in Ubiq:` <https://blog.ubiqsmart.com/ubiq-research-monetary-policy-2e27458983ec>\n"
 	case "!nucleus", "!transparency":
 		message = "`Nucleus Transparency Report:` <https://blog.ubiqsmart.com/nucleus-transparency-report-6496e444bd85>\n"
 	case "!onepage":
@@ -84,8 +84,8 @@ func Commands(command string) *string {
 		message += "<https://ubiqminers.com>            <https://ubiqpool.maxhash.org>    <http://ubiq.minerpool.net>       <http://ubiq.millio.nz>\n"
 		message += "<https://ubiq.suprnova.cc>          <https://ubiq.anorak.tech>        <https://ubqkings.com>            <http://www.ubiq.cc/minerpool/>\n"
 		message += "<https://aikapool.com/ubiq/>        <http://ubiq.nevermining.org>     <http://ubq.pool.sexy>            <https://ubiqpool.io>\n"
-		message += "<https://ubq.solopool.org>          <https://ubq.zet-tech.eu>         <https://ubiq.clona.ru>           <https://pools.hppcg.com/coins/ubiq/>\n"
-		message += "<http://comining.me/ubiq>           <https://ubq.mypool.online>       <https://ubiqpool.com/>           <https://ubiqpool.fr/>\n"
+		message += "<https://ubq.solopool.org>          <https://ubq.zet-tech.eu>         <https://ubiq.clona.ru>           <https://ubiqpool.fr/>\n"
+		message += "<http://comining.me/ubiq>           <https://ubq.mypool.online>       <https://ubiqpool.com/>\n"
 		message += "<https://ucrypto.net/currency/?curr=UBQ>\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
