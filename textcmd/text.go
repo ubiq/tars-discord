@@ -27,6 +27,7 @@ func Commands(command string) *string {
 		message += "`!escher` - Escher contract info\n"
 		message += "`!exchange / !market` - Ubiq exchanges\n"
 		message += "`!explorer` - Ubiq Block Explorer\n"
+		message += "`!github` - Ubiq GitHub Repository\n"
 		message += "`!hide` - How to Hide Channels\n"
 		message += "`!miner` - Mining Software\n"
 		message += "`!mp / !monetarypolicy` - Monetary Policy\n"
@@ -64,6 +65,8 @@ func Commands(command string) *string {
 		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Cryptopia:` <https://www.cryptopia.co.nz/Exchange/?market=UBQ_BTC> `Litebit:` <https://www.litebit.eu/en/buy/ubiq> `UPBit:` <https://upbit.com/exchange?code=CRIX.UPBIT.BTC-UBQ>\n"
 	case "!explorer":
 		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <http://www.ubiq.cc> `Explorer 3:` <https://ubiqexplorer.com>\n"
+	case "!github":
+		message = "`GitHub:` <https://github.com/ubiq>\n"
 	case "!hide", "!hidechannels":
 		message = "<https://support.discordapp.com/hc/en-us/articles/213599277-How-do-I-hide-channels->\n"
 	case "!invite":
