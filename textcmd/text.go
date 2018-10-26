@@ -82,7 +82,7 @@ func Commands(command string) *string {
 	case "!pools":
 		message = "`List of known mining pools:`\n"
 		message += "*UIP 1 ready:*\n"
-		message += "<http://ubiq.hodlpool.com>          <https://ubq.mypool.online>       <http://terrahash.cc>\n"
+		message += "<http://ubq.altpool.pro>            <http://ubiq.hodlpool.com>        <https://ubq.mypool.online>       <http://terrahash.cc>\n"
 		message += "*May not be UIP 1 ready:*\n"
 		message += "<https://ubiqminers.com>            <https://ubiqpool.maxhash.org>    <http://ubiq.minerpool.net>       <http://ubiq.millio.nz>\n"
 		message += "<https://ubiq.suprnova.cc>          <https://ubiq.anorak.tech>        <https://ubqkings.com>            <http://www.ubiq.cc/minerpool/>\n"
