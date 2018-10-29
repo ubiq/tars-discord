@@ -83,7 +83,7 @@ func Commands(command string) *string {
 		message = "`List of known mining pools:`\n"
 		message += "*UIP 1 ready:*\n"
 		message += "<http://ubq.altpool.pro>            <http://ubiq.hodlpool.com>        <https://ubq.mypool.online>       <http://terrahash.cc>\n"
-		message += "<https://ubq.zet-tech.eu>		<https://ubiqpool.fr/>\n"
+		message += "<https://ubq.zet-tech.eu>		<https://ubiqpool.fr/>		  <https://ubiq.mole-pool.net/>\n"
 		message += "*May not be UIP 1 ready:*\n"
 		message += "<https://ubiqminers.com>            <https://ubiqpool.maxhash.org>    <http://ubiq.minerpool.net>       <http://ubiq.millio.nz>\n"
 		message += "<https://ubiq.suprnova.cc>          <https://ubiq.anorak.tech>        <http://www.ubiq.cc/minerpool/>   <https://aikapool.com/ubiq/>\n"
