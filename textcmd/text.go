@@ -85,10 +85,11 @@ func Commands(command string) *string {
 		message += "<http://ubq.altpool.pro>            <http://ubiq.hodlpool.com>        <https://ubq.mypool.online>       <http://terrahash.cc>\n"
 		message += "<https://ubq.zet-tech.eu>		<https://ubiqpool.fr/>\n"
 		message += "*May not be UIP 1 ready:*\n"
-		message += "<https://ubiqminers.com>            <https://ubiqpool.maxhash.org>    <http://ubiq.minerpool.net>       <http://ubiq.millio.nz>\n"
+		message += "<https://ubiq.mole-pool.net/>	<https://ubiqminers.com>          <https://ubiqpool.maxhash.org>    <http://ubiq.minerpool.net>\n"
 		message += "<https://ubiq.suprnova.cc>          <https://ubiq.anorak.tech>        <http://www.ubiq.cc/minerpool/>   <https://aikapool.com/ubiq/>\n"
 		message += "<http://ubiq.nevermining.org>       <http://ubq.pool.sexy>            <https://ubiqpool.io>		    <https://ubq.solopool.org>\n"
-		message += "<https://ubiq.clona.ru>             <http://comining.me/ubiq>         <https://ubiqpool.com/>	    <https://ucrypto.net/currency/?curr=UBQ>\n"
+		message += "<https://ubiq.clona.ru>             <http://comining.me/ubiq>         <https://ubiqpool.com/>	    <http://ubiq.millio.nz>\n"
+		message += "<https://ucrypto.net/currency/?curr=UBQ>\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
