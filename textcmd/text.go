@@ -72,7 +72,7 @@ func Commands(command string) *string {
 	case "!invite":
 		message = "`Ubiq Discord invite link:` <https://discord.gg/HF6vEGF>\n"
 	case "!miner":
-		message = "`Ubqminer`: <https://github.com/ubiq/ubqminer/releases> `Claymore:` <https://bitcointalk.org/index.php?topic=1433925.0> `Phoenix:` <https://bitcointalk.org/index.php?topic=2647654.2080>\n"
+		message = "`Ubqminer`: <https://github.com/ubiq/ubqminer/releases>\n"
 	case "!mp", "!monetarypolicy":
 		message = "`Monetary policy and mining block rewards scheme in Ubiq:` <https://blog.ubiqsmart.com/ubiq-research-monetary-policy-2e27458983ec>\n"
 	case "!nucleus", "!transparency":
@@ -83,11 +83,12 @@ func Commands(command string) *string {
 		message = "`List of known mining pools:`\n"
 		message += "*UIP 1 ready:*\n"
 		message += "<http://ubq.altpool.pro>            <http://ubiq.hodlpool.com>        <https://ubq.mypool.online>       <http://terrahash.cc>\n"
-		message += "<https://ubq.zet-tech.eu>		<https://ubiqpool.fr/>		  <https://ubiq.mole-pool.net/>\n"
+		message += "<https://ubq.zet-tech.eu>		<https://ubiqpool.fr/>		  <https://ubiq.mole-pool.net/>       <https://ubiqpool.maxhash.org>\n"
+		message += "<https://ubiqpool.io>\n"
 		message += "*May not be UIP 1 ready:*\n"
-		message += "<https://ubiqminers.com>            <https://ubiqpool.maxhash.org>    <http://ubiq.minerpool.net>       <http://ubiq.millio.nz>\n"
+		message += "<https://ubiqminers.com>                <http://ubiq.minerpool.net>       <http://ubiq.millio.nz>\n"
 		message += "<https://ubiq.suprnova.cc>          <https://ubiq.anorak.tech>        <http://www.ubiq.cc/minerpool/>   <https://aikapool.com/ubiq/>\n"
-		message += "<http://ubiq.nevermining.org>       <http://ubq.pool.sexy>            <https://ubiqpool.io>		    <https://ubq.solopool.org>\n"
+		message += "<http://ubiq.nevermining.org>       <http://ubq.pool.sexy>            		    <https://ubq.solopool.org>\n"
 		message += "<https://ubiq.clona.ru>             <http://comining.me/ubiq>         <https://ubiqpool.com/>	    <https://ucrypto.net/currency/?curr=UBQ>\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
