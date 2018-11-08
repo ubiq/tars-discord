@@ -111,7 +111,7 @@ func Commands(command string) *string {
 	case "!wallet":
 		message = "`Web:` <https://pyrus.ubiqsmart.com> `Web2:` <https://myetherwallet.com> `GUI:` <https://github.com/ubiq/fusion/releases> `CLI:` <https://github.com/ubiq/go-ubiq/releases>\n"
 	case "!website", "!site":
-		message = "`Ubiq website:` <http://ubiqsmart.com/>\n"
+		message = "`Ubiq website:` <http://ubiqsmart.com/>	`Ubiq Community website:` <https://www.ubiqescher.com/>\n"
 	case "!shokku":
 		message = "If you are familiar with Infura <https://infura.io> on Ethereum, Shokku (<https://shokku.com> - website will be available soon) provides the same functionality (public API for dapps to interact directly with the chain without running their own nodes, and ipfs). Something to note is that this project is not based on forked code, it has been written from scratch as Infura is not open source. If you want more information or need assitance to use the service, just ping aldoborrero.\n"
 	case "!vyper":
