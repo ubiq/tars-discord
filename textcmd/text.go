@@ -84,12 +84,12 @@ func Commands(command string) *string {
 		message += "*UIP 1 ready:*\n"
 		message += "<http://ubq.altpool.pro>            <http://ubiq.hodlpool.com>        <https://ubq.mypool.online>       <http://terrahash.cc>\n"
 		message += "<https://ubq.zet-tech.eu>		<https://ubiqpool.fr/>		  <https://ubiq.mole-pool.net/>       <https://ubiqpool.maxhash.org>\n"
-		message += "<https://ubiqpool.io>\n"
+		message += "<https://ubiqpool.io>		<http://ubiq.millio.nz>		<https://ubiq.clona.ru>		<http://ubq.pool.sexy>\n"
 		message += "*May not be UIP 1 ready:*\n"
-		message += "<https://ubiqminers.com>                <http://ubiq.minerpool.net>       <http://ubiq.millio.nz>\n"
+		message += "<https://ubiqminers.com>                <http://ubiq.minerpool.net>       \n"
 		message += "<https://ubiq.suprnova.cc>          <https://ubiq.anorak.tech>        <http://www.ubiq.cc/minerpool/>   <https://aikapool.com/ubiq/>\n"
-		message += "<http://ubiq.nevermining.org>       <http://ubq.pool.sexy>            		    <https://ubq.solopool.org>\n"
-		message += "<https://ubiq.clona.ru>             <http://comining.me/ubiq>         <https://ubiqpool.com/>	    <https://ucrypto.net/currency/?curr=UBQ>\n"
+		message += "<http://ubiq.nevermining.org>       <https://ubq.solopool.org>\n"
+		message += "<http://comining.me/ubiq>         <https://ubiqpool.com/>	    <https://ucrypto.net/currency/?curr=UBQ>\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
