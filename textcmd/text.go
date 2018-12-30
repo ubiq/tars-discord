@@ -19,7 +19,6 @@ func Commands(command string) *string {
 		message += "`!verify` - How to get Verified on Ubiq Discord\n"
 		message += "\n"
 		message += "__**Ubiq specific**__\n\n"
-		message += "`!apx` - APX Ventures info\n"
 		message += "`!backup` - Backup your account\n"
 		message += "`!bots` - Ubiq Twitter bots\n"
 		message += "`!caps` - Correct spelling for Ubiq\n"
@@ -45,8 +44,6 @@ func Commands(command string) *string {
 		message += "__**Programming**__\n\n"
 		message += "`!ethunits` - Ethereum units\n"
 		message += "`!solidity` - Solidity documentation\n"
-	case "!apx":
-		message = "`Channel:` #apx-ventures      `Website:` <http://apxv.org>     `Telegram:` <http://t.me/apxventures>     `Roadmap:` <https://drive.google.com/file/d/0ByqyVzIU5PtFLXp2UGZPcUFYd1U/view>\n"
 	case "!backup":
 		message = "To backup your wallet file(s), save every file in the following directories: Mac: `~/Library/Ubiq/keystore` Linux: `~/.ubiq/keystore` Windows: `%APPDATA%/Ubiq/keystore` *Note that each time you create a new account a new file will be created, so you must back up the new file in that directory when you create a new account.* The following video will help you on Windows: https://www.youtube.com/watch?v=x5tNtKpnkMw\n"
 	case "!bots":
