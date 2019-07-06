@@ -96,8 +96,8 @@ func Commands(command string) *string {
 	case "!verify", "!verified":
 		message = "__**Verified**__"
 		message += "\n"
-		message += "You can request to be Verified in the <#348034489655623680> channel. This allows us to see who is a community member and gives you extra privileges such as Voice chat and access to more channels.\n\n"
-		message += "This policy is in place to prevent bots, spammers and scammers from entering our main channels.\n"
+		message += "You can request to be Verified in the <#348034489655623680> channel. This allows us to see who is a community member and lets you send messages.\n\n"
+		message += "This policy is in place to prevent bots, spammers and scammers.\n"
 		message += "To get Verified:\n"
 		message += "a) Mention you would like to be Verified in the <#348034489655623680> channel. Mentioning where you came from and how you found out about Ubiq helps too.\n"
 		message += "b) Only people with a profile pic are allowed to be Verified. It doesn't have to be your actual photo. It can be any appropriate image you like."
