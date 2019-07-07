@@ -42,6 +42,20 @@ var (
 	defaultConfigFile = filepath.Join(appHomeDir, "secrets.env")
 
 	hClient = &http.Client{Timeout: 8 * time.Second}
+
+	// Flood
+	guildMemberAddCount  = 0
+	floodMemberTimestamp time.Time
+	floodAlertTimestamp  time.Time
+)
+
+const (
+	// Flood
+	floodMemberAddInterval = 3
+	floodSeconds           = 60
+	floodAlertSeconds      = 600
+	floodAlertChannel      = "504427120236167207"
+	moderatorID            = "348038402148532227"
 )
 
 func poloPrice(vals *string) *string {
@@ -620,6 +634,7 @@ func main() {
 
 	// Register the messageCreate func as a callback for MessageCreate events.
 	dg.AddHandler(messageCreate)
+	dg.AddHandler(guildMemberAdd)
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
@@ -652,4 +667,41 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		message := handleMessage(s, m)
 		s.ChannelMessageSend(m.ChannelID, *message)
 	}
+}
+
+// This function is called on GuildMemberAdd event
+// Currently just performs Flood handling
+func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
+
+	guildMemberAddCount += 1
+
+	if guildMemberAddCount%floodMemberAddInterval != 0 {
+		return
+	}
+
+	// Flood check
+	t1, _ := m.JoinedAt.Parse()
+	if !floodMemberTimestamp.IsZero() {
+		diff := t1.Sub(floodMemberTimestamp)
+		if diff.Seconds() < floodSeconds {
+			if !floodAlertTimestamp.IsZero() {
+				// Set to future time
+				floodAlertTimestamp.Add(time.Second * floodAlertSeconds * 2)
+			}
+
+			diffAlert := t1.Sub(floodAlertTimestamp)
+
+			if diffAlert.Seconds() > floodAlertSeconds {
+				floodMessage := fmt.Sprintf("<@&%s> 🚨 Flood detected. %d Joins in %.1f seconds", moderatorID, floodMemberAddInterval, diff.Seconds())
+				s.ChannelMessageSend(floodAlertChannel, floodMessage)
+				floodAlertTimestamp = t1
+			}
+		}
+		// Reset floodMemberTimestamp
+		floodMemberTimestamp = time.Time{}
+		return
+	}
+
+	// Set new value
+	floodMemberTimestamp, _ = m.JoinedAt.Parse()
 }
