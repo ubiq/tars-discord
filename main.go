@@ -676,32 +676,30 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	guildMemberAddCount += 1
 
 	if guildMemberAddCount%floodMemberAddInterval != 0 {
+		if floodMemberTimestamp.IsZero() {
+			// Initialize value
+			floodMemberTimestamp = time.Now()
+		}
 		return
 	}
 
 	// Flood check
-	t1, _ := m.JoinedAt.Parse()
-	if !floodMemberTimestamp.IsZero() {
-		diff := t1.Sub(floodMemberTimestamp)
-		if diff.Seconds() < floodSeconds {
-			if !floodAlertTimestamp.IsZero() {
-				// Set to future time
-				floodAlertTimestamp.Add(time.Second * floodAlertSeconds * 2)
-			}
-
-			diffAlert := t1.Sub(floodAlertTimestamp)
-
-			if diffAlert.Seconds() > floodAlertSeconds {
-				floodMessage := fmt.Sprintf("<@&%s> 🚨 Flood detected. %d Joins in %.1f seconds", moderatorID, floodMemberAddInterval, diff.Seconds())
-				s.ChannelMessageSend(floodAlertChannel, floodMessage)
-				floodAlertTimestamp = t1
-			}
+	t1 := time.Now()
+	diff := t1.Sub(floodMemberTimestamp)
+	if diff.Seconds() < floodSeconds {
+		if floodAlertTimestamp.IsZero() {
+			// Initialize to past time
+			floodAlertTimestamp = time.Now().Add(time.Second * time.Duration(-floodAlertSeconds*2))
 		}
-		// Reset floodMemberTimestamp
-		floodMemberTimestamp = time.Time{}
-		return
-	}
 
+		diffAlert := t1.Sub(floodAlertTimestamp)
+
+		if diffAlert.Seconds() > floodAlertSeconds {
+			floodMessage := fmt.Sprintf("<@&%s> 🚨 Flood detected. %d Joins in %.1f seconds", moderatorID, floodMemberAddInterval, diff.Seconds())
+			s.ChannelMessageSend(floodAlertChannel, floodMessage)
+			floodAlertTimestamp = t1
+		}
+	}
 	// Set new value
-	floodMemberTimestamp, _ = m.JoinedAt.Parse()
+	floodMemberTimestamp = time.Now()
 }
