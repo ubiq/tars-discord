@@ -56,6 +56,7 @@ const (
 	floodAlertSeconds      = 600
 	floodAlertChannel      = "504427120236167207"
 	moderatorID            = "348038402148532227"
+	shieldsTimerSeconds    = 600
 )
 
 func poloPrice(vals *string) *string {
@@ -695,9 +696,28 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 		diffAlert := t1.Sub(floodAlertTimestamp)
 
 		if diffAlert.Seconds() > floodAlertSeconds {
-			floodMessage := fmt.Sprintf("<@&%s> 🚨 Flood detected. %d Joins in %.1f seconds", moderatorID, floodMemberAddInterval, diff.Seconds())
+			floodMessage := fmt.Sprintf("<@&%s> 🚨 Flood detected. %d Joins in %.1f seconds. Shields ON - Increased verification level", moderatorID, floodMemberAddInterval, diff.Seconds())
 			s.ChannelMessageSend(floodAlertChannel, floodMessage)
 			floodAlertTimestamp = t1
+
+			// Shields on - Increase verification level
+			level := discordgo.VerificationLevelVeryHigh
+			gp := discordgo.GuildParams{"", "", &level, 0, "", 0, "", "", ""}
+			s.GuildEdit(m.GuildID, gp)
+
+			// Shields off - Restore default verification level after a timer
+			shieldsOffMessage := fmt.Sprintf("Shields OFF - Restored default verification level")
+			shieldsTimer := time.NewTimer(shieldsTimerSeconds * time.Second)
+
+			go func() {
+				<-shieldsTimer.C
+				level = discordgo.VerificationLevelMedium
+				gp = discordgo.GuildParams{"", "", &level, 0, "", 0, "", "", ""}
+				s.GuildEdit(m.GuildID, gp)
+
+				s.ChannelMessageSend(floodAlertChannel, shieldsOffMessage)
+			}()
+
 		}
 	}
 	// Set new value
