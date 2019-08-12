@@ -57,7 +57,19 @@ const (
 	floodAlertChannel      = "504427120236167207"
 	moderatorID            = "348038402148532227"
 	shieldsTimerSeconds    = 600
+
+	tradingChannelID = "348036278673211392"
 )
+
+func checkTradingChannel(channelID string) *string {
+	message := ""
+
+	if channelID != tradingChannelID {
+		message = fmt.Sprintf("This price related command is only allowed in the <#%s> channel", tradingChannelID)
+	}
+
+	return &message
+}
 
 func poloPrice(vals *string) *string {
 	message := ""
@@ -405,6 +417,12 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 
 	switch command {
 	case "!price":
+		channelCheck := *checkTradingChannel(m.ChannelID)
+		if channelCheck != "" {
+			message = channelCheck
+			break
+		}
+
 		if len(arguments) == 0 {
 			message = "Usage: !price [TICKER]"
 			break
@@ -511,6 +529,12 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		initializePoloniex(db)
 		message = "Exchange pairs refreshed"
 	case "!ubqusd":
+		channelCheck := *checkTradingChannel(m.ChannelID)
+		if channelCheck != "" {
+			message = channelCheck
+			break
+		}
+
 		usageStr := "Usage: !ubqusd [AMOUNT] eg. !ubqusd 10"
 		valueErrStr := fmt.Sprintf("Value error ;_; - %s", usageStr)
 		if len(arguments) < 1 {
@@ -529,6 +553,12 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		}
 		message = *ubqUSD(&amount)
 	case "!ubqeur":
+		channelCheck := *checkTradingChannel(m.ChannelID)
+		if channelCheck != "" {
+			message = channelCheck
+			break
+		}
+
 		usageStr := "Usage: !ubqeur [AMOUNT] eg. !ubqeur 10"
 		valueErrStr := fmt.Sprintf("Value error ;_; - %s", usageStr)
 		if len(arguments) < 1 {
@@ -547,6 +577,12 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		}
 		message = *ubqEUR(&amount)
 	case "!ubqlambo":
+		channelCheck := *checkTradingChannel(m.ChannelID)
+		if channelCheck != "" {
+			message = channelCheck
+			break
+		}
+
 		message = *ubqLambo()
 	// Text commands
 	// Keep this in alphabetical order. Where possible just use the singular term.
