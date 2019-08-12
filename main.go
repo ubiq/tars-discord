@@ -522,7 +522,11 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 			initializePoloniex(db)
 		}
 
+		// Delete originating message
+		s.ChannelMessageDelete(m.ChannelID, m.ID)
+
 		message = *generatePriceMessage(prices, tickerHeader)
+		message = fmt.Sprintf("%sRequested by: %s", message, m.Author.Mention())
 	case "!pricerefresh":
 		// Refresh coin pairs in Bolt DB
 		initializeBittrex(db)
