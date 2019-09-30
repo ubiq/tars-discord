@@ -555,7 +555,12 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 			message = "ERR: Pick an amount greater than 0.1 an less than 100 million"
 			break
 		}
+
+		// Delete originating message
+		s.ChannelMessageDelete(m.ChannelID, m.ID)
+
 		message = *ubqUSD(&amount)
+		message = fmt.Sprintf("%sRequested by: %s", message, m.Author.Mention())
 	case "!ubqeur":
 		channelCheck := *checkTradingChannel(m.ChannelID)
 		if channelCheck != "" {
@@ -579,7 +584,12 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 			message = "ERR: Pick an amount greater than 0.1 an less than 100 million"
 			break
 		}
+
+		// Delete originating message
+		s.ChannelMessageDelete(m.ChannelID, m.ID)
+
 		message = *ubqEUR(&amount)
+		message = fmt.Sprintf("%sRequested by: %s", message, m.Author.Mention())
 	case "!ubqlambo":
 		channelCheck := *checkTradingChannel(m.ChannelID)
 		if channelCheck != "" {
@@ -676,6 +686,8 @@ func main() {
 	// Register the messageCreate func as a callback for MessageCreate events.
 	dg.AddHandler(messageCreate)
 	dg.AddHandler(guildMemberAdd)
+
+	dg.StateEnabled = false
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
