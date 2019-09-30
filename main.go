@@ -687,7 +687,8 @@ func main() {
 	dg.AddHandler(messageCreate)
 	dg.AddHandler(guildMemberAdd)
 
-	dg.StateEnabled = false
+	dg.State.TrackPresences = false
+	dg.State.TrackVoice = false
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
