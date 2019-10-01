@@ -16,12 +16,13 @@ import (
 
 	"github.com/boltdb/bolt"
 	"github.com/bwmarrin/discordgo"
-	"github.com/decred/dcrd/dcrutil"
+	"github.com/decred/dcrd/dcrutil/v2"
 	"github.com/joho/godotenv"
 	"github.com/jpatel888/go-bitstamp"
-	"github.com/jyap808/go-bittrex"
 	"github.com/jyap808/go-gemini"
 	"github.com/jyap808/go-poloniex"
+	"github.com/shopspring/decimal"
+	"github.com/toorop/go-bittrex"
 	"github.com/ubiq/tars-discord/optionalchannelscmd"
 	"github.com/ubiq/tars-discord/textcmd"
 )
@@ -113,9 +114,10 @@ func trexPrice(vals *string) *string {
 	} else {
 		y1 := marketSummary[0].PrevDay
 		y2 := marketSummary[0].Last
-		change := ((y2 - y1) / y1) * 100
-		message = fmt.Sprintf("Bittrex  - BID: %.8f ASK: %.8f LAST: %.8f HIGH: %.8f LOW: %.8f VOLUME: %.2f %s, %.4f BTC CHANGE: %.2f%%",
-			marketSummary[0].Bid, marketSummary[0].Ask, marketSummary[0].Last, marketSummary[0].High, marketSummary[0].Low, marketSummary[0].Volume, upperTicker, marketSummary[0].BaseVolume, change)
+		decimal100 := decimal.NewFromFloat(100.0)
+		change := y2.Sub(y1).Div(y1).Mul(decimal100)
+		message = fmt.Sprintf("Bittrex  - BID: %s ASK: %s LAST: %s HIGH: %s LOW: %s VOLUME: %s %s, %s BTC CHANGE: %s%%",
+			marketSummary[0].Bid.StringFixed(8), marketSummary[0].Ask.StringFixed(8), marketSummary[0].Last.StringFixed(8), marketSummary[0].High.StringFixed(8), marketSummary[0].Low.StringFixed(8), marketSummary[0].Volume.StringFixed(2), upperTicker, marketSummary[0].BaseVolume.StringFixed(4), change.StringFixed(2))
 	}
 
 	return &message
@@ -163,8 +165,10 @@ func ubqEUR(amount *float64) *string {
 	if btcPrice == 0 {
 		return &fiatErrMessage
 	} else {
-		eurValue := *amount * ticker.Ask * btcPrice
-		message = fmt.Sprintf("```%.1f UBQ = €%.3f EUR```", *amount, eurValue)
+		decimalAmount := decimal.NewFromFloat(*amount)
+		decimalBTCPrice := decimal.NewFromFloat(btcPrice)
+		eurValue := ticker.Ask.Mul(decimalAmount).Mul(decimalBTCPrice)
+		message = fmt.Sprintf("```%.1f UBQ = €%s EUR```", *amount, eurValue.StringFixed(3))
 		return &message
 	}
 }
@@ -191,9 +195,11 @@ func ubqUSD(amount *float64) *string {
 
 	btcPrice := btcTicker.Last
 
-	usdValue := *amount * ticker.Ask * btcPrice
+	decimalAmount := decimal.NewFromFloat(*amount)
+	decimalBTCPrice := decimal.NewFromFloat(btcPrice)
+	usdValue := ticker.Ask.Mul(decimalAmount).Mul(decimalBTCPrice)
 
-	message = fmt.Sprintf("```%.1f UBQ = $%.3f USD```", *amount, usdValue)
+	message = fmt.Sprintf("```%.1f UBQ = $%s USD```", *amount, usdValue.StringFixed(3))
 
 	return &message
 }
@@ -219,13 +225,14 @@ func ubqLambo() *string {
 	}
 
 	btcPrice := btcTicker.Last
-	amount := 1.0
 
-	usdValue := amount * ticker.Ask * btcPrice
+	decimalAmount := decimal.NewFromFloat(1.0)
+	decimalBTCPrice := decimal.NewFromFloat(btcPrice)
+	usdValue := ticker.Ask.Mul(decimalAmount).Mul(decimalBTCPrice)
 
-	lamboValue := 300000 / usdValue
+	lamboValue := decimal.NewFromFloat(300000.0).Div(usdValue)
 
-	message = fmt.Sprintf("```You would need about %.0f UBQ to buy a lambo.```", lamboValue)
+	message = fmt.Sprintf("```You would need about %s UBQ to buy a lambo.```", lamboValue.StringFixed(0))
 
 	return &message
 }
