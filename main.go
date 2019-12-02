@@ -29,12 +29,12 @@ import (
 
 // Variables used for command line parameters
 var (
-	bittrex_api_key     = ""
-	bittrex_api_secret  = ""
-	gemini_api_key      = ""
-	gemini_api_secret   = ""
-	poloniex_api_key    = ""
-	poloniex_api_secret = ""
+	bittrexAPIKey     = ""
+	bittrexAPISecret  = ""
+	geminiAPIKey      = ""
+	geminiAPISecret   = ""
+	poloniexAPIKey    = ""
+	poloniexAPISecret = ""
 
 	db *bolt.DB
 
@@ -75,7 +75,7 @@ func checkTradingChannel(channelID string) *string {
 func poloPrice(vals *string) *string {
 	message := ""
 
-	poloniex := poloniex.New(poloniex_api_key, poloniex_api_secret)
+	poloniex := poloniex.New(poloniexAPIKey, poloniexAPISecret)
 
 	rawticker := *vals
 	upperTicker := strings.ToUpper(rawticker)
@@ -101,7 +101,7 @@ func poloPrice(vals *string) *string {
 func trexPrice(vals *string) *string {
 	message := ""
 
-	bittrex := bittrex.New(bittrex_api_key, bittrex_api_secret)
+	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
 
 	rawticker := vals
 	upperTicker := strings.ToUpper(*rawticker)
@@ -145,7 +145,7 @@ func ubqEUR(amount *float64) *string {
 	fiatErrMessage := "Error retrieving fiat conversion from remote API's"
 
 	// Bittrex lookup
-	bittrex := bittrex.New(bittrex_api_key, bittrex_api_secret)
+	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
 	upperTicker := "UBQ"
 	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
@@ -164,26 +164,25 @@ func ubqEUR(amount *float64) *string {
 
 	if btcPrice == 0 {
 		return &fiatErrMessage
-	} else {
-		decimalAmount := decimal.NewFromFloat(*amount)
-		decimalBTCPrice := decimal.NewFromFloat(btcPrice)
-		eurValue := ticker.Ask.Mul(decimalAmount).Mul(decimalBTCPrice)
-		message = fmt.Sprintf("```%.1f UBQ = €%s EUR```", *amount, eurValue.StringFixed(3))
-		return &message
 	}
+	decimalAmount := decimal.NewFromFloat(*amount)
+	decimalBTCPrice := decimal.NewFromFloat(btcPrice)
+	eurValue := ticker.Ask.Mul(decimalAmount).Mul(decimalBTCPrice)
+	message = fmt.Sprintf("```%.1f UBQ = €%s EUR```", *amount, eurValue.StringFixed(3))
+	return &message
 }
 
 func ubqUSD(amount *float64) *string {
 	message := ""
 
 	// Bittrex lookup
-	bittrex := bittrex.New(bittrex_api_key, bittrex_api_secret)
+	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
 	upperTicker := "UBQ"
 	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
 
 	// BTC lookup
-	gemini := gemini.New(gemini_api_key, gemini_api_secret)
+	gemini := gemini.New(geminiAPIKey, geminiAPISecret)
 	btcTickerName := "btcusd"
 	btcTicker, err := gemini.GetTicker(btcTickerName)
 
@@ -208,13 +207,13 @@ func ubqLambo() *string {
 	message := ""
 
 	// Bittrex lookup
-	bittrex := bittrex.New(bittrex_api_key, bittrex_api_secret)
+	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
 	upperTicker := "UBQ"
 	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
 
 	// BTC lookup
-	gemini := gemini.New(gemini_api_key, gemini_api_secret)
+	gemini := gemini.New(geminiAPIKey, geminiAPISecret)
 	btcTickerName := "btcusd"
 	btcTicker, err := gemini.GetTicker(btcTickerName)
 
@@ -241,7 +240,7 @@ func initializeBittrex(db *bolt.DB) (err error) {
 	// Initial Bittrex table with data
 
 	log.Println("initializeBittrex: START")
-	bittrex := bittrex.New(bittrex_api_key, bittrex_api_secret)
+	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
 	markets, err := bittrex.GetMarkets()
 	if err != nil {
 		return err
@@ -294,7 +293,7 @@ func initializePoloniex(db *bolt.DB) (err error) {
 	// Initialize Poloniex table with data
 
 	log.Println("initializePoloniex: START")
-	poloniex := poloniex.New(poloniex_api_key, poloniex_api_secret)
+	poloniex := poloniex.New(poloniexAPIKey, poloniexAPISecret)
 	currencies, err := poloniex.GetCurrencies()
 	if err != nil {
 		return err
@@ -366,7 +365,7 @@ func generatePriceMessage(prices []string, tickerHeader string) *string {
 func btcPrice() *string {
 	message := ""
 
-	gemini := gemini.New(gemini_api_key, gemini_api_secret)
+	gemini := gemini.New(geminiAPIKey, geminiAPISecret)
 
 	tickerName := "btcusd"
 
@@ -390,7 +389,7 @@ func btcPrice() *string {
 	return &message
 }
 
-func KeysString(m map[string]bool) string {
+func keysString(m map[string]bool) string {
 	keys := make([]string, 0, len(m))
 	for k := range m {
 		keys = append(keys, k)
@@ -611,7 +610,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		message = *textcmd.Commands(command)
 	case "!join":
 		usageStr := "**Usage:** !join [OPTIONAL_CHANNEL]\n\n"
-		usageStr += fmt.Sprintf("**Optional Channels:** %s", KeysString(optionalChannels))
+		usageStr += fmt.Sprintf("**Optional Channels:** %s", keysString(optionalChannels))
 
 		if len(arguments) == 0 {
 			message = usageStr
@@ -628,7 +627,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		}
 	case "!leave":
 		usageStr := "**Usage:** !leave [OPTIONAL_CHANNEL]\n\n"
-		usageStr += fmt.Sprintf("**Optional Channels:** %s", KeysString(optionalChannels))
+		usageStr += fmt.Sprintf("**Optional Channels:** %s", keysString(optionalChannels))
 
 		if len(arguments) == 0 {
 			message = usageStr
@@ -734,7 +733,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 // Currently just performs Flood handling
 func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 
-	guildMemberAddCount += 1
+	guildMemberAddCount++
 
 	if guildMemberAddCount%floodMemberAddInterval != 0 {
 		if floodMemberTimestamp.IsZero() {
