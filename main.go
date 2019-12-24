@@ -1,11 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -41,8 +38,6 @@ var (
 	appHomeDir        = dcrutil.AppDataDir("ubq-tars-discord", false)
 	defaultBoldDBFile = filepath.Join(appHomeDir, "exchange_pairs.db")
 	defaultConfigFile = filepath.Join(appHomeDir, "secrets.env")
-
-	hClient = &http.Client{Timeout: 8 * time.Second}
 
 	// Flood
 	guildMemberAddCount  = 0
@@ -121,23 +116,6 @@ func trexPrice(vals *string) *string {
 	}
 
 	return &message
-}
-
-func getUSDto(fiat string) float64 {
-	r, err := hClient.Get("https://api.fixer.io/latest?base=USD")
-	if err != nil {
-		log.Fatal(err)
-		return -1.0
-	}
-	b, readErr := ioutil.ReadAll(r.Body)
-	if readErr != nil {
-		log.Fatal(readErr)
-		return -1.0
-	}
-	defer r.Body.Close()
-	var f interface{}
-	json.Unmarshal([]byte(b), &f)
-	return f.(map[string]interface{})["rates"].(map[string]interface{})[fiat].(float64)
 }
 
 func ubqEUR(amount *float64) *string {
