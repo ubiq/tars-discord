@@ -1,7 +1,5 @@
 package textcmd
 
-var guestsChannelID = "348034489655623680"
-
 func Commands(command string) *string {
 	message := ""
 
