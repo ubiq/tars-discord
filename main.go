@@ -43,6 +43,7 @@ var (
 	guildMemberAddCount  = 0
 	floodMemberTimestamp time.Time
 	floodAlertTimestamp  time.Time
+	terminatorMemberFlag = false
 )
 
 const (
@@ -53,6 +54,7 @@ const (
 	floodAlertChannel      = "504427120236167207"
 	moderatorID            = "348038402148532227"
 	shieldsTimerSeconds    = 600
+	terminatorTimerSeconds = 60
 
 	tradingChannelID = "348036278673211392"
 )
@@ -711,8 +713,17 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 // Currently just performs Flood handling
 func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 
+	// Increment global counter
 	guildMemberAddCount++
 
+	// Check and Terminate
+	if terminatorMemberFlag {
+		banUserMessage := fmt.Sprintf("BAN - Terminate user: <@%s>", m.User.ID)
+		s.ChannelMessageSend(floodAlertChannel, banUserMessage)
+		s.GuildBanCreateWithReason(m.GuildID, m.User.ID, "TARS flood ban", 1)
+	}
+
+	// Exit function if floodMemberAddInterval isn't hit
 	if guildMemberAddCount%floodMemberAddInterval != 0 {
 		if floodMemberTimestamp.IsZero() {
 			// Initialize value
@@ -732,6 +743,7 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 
 		diffAlert := t1.Sub(floodAlertTimestamp)
 
+		// This should only fire once
 		if diffAlert.Seconds() > floodAlertSeconds {
 			floodMessage := fmt.Sprintf("<@&%s> 🚨 Flood detected. %d Joins in %.1f seconds. Shields ON - Increased verification level", moderatorID, floodMemberAddInterval, diff.Seconds())
 			s.ChannelMessageSend(floodAlertChannel, floodMessage)
@@ -741,6 +753,16 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 			level := discordgo.VerificationLevelVeryHigh
 			gp := discordgo.GuildParams{"", "", &level, 0, "", 0, "", "", ""}
 			s.GuildEdit(m.GuildID, gp)
+
+			// Enable Terminator and Set Terminator timer
+			terminatorMemberFlag = true
+			terminatorOffMessage := fmt.Sprintf("Terminator OFF - You just can't go around killing people")
+			terminatorTimer := time.NewTicker(terminatorTimerSeconds * time.Second)
+			go func() {
+				<-terminatorTimer.C
+				terminatorMemberFlag = false
+				s.ChannelMessageSend(floodAlertChannel, terminatorOffMessage)
+			}()
 
 			// Shields off - Restore default verification level after a timer
 			shieldsOffMessage := fmt.Sprintf("Shields OFF - Restored default verification level")
