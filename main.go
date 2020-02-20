@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -49,7 +50,7 @@ var (
 const (
 	// Flood
 	floodMemberAddInterval = 3
-	floodSeconds           = 60
+	floodMilliseconds      = 60000 // 60 seconds
 	floodAlertSeconds      = 600
 	floodAlertChannel      = "504427120236167207"
 	moderatorID            = "348038402148532227"
@@ -718,9 +719,11 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 
 	// Check and Terminate
 	if terminatorMemberFlag {
-		banUserMessage := fmt.Sprintf("BAN - Terminate user: <@%s>", m.User.ID)
-		s.ChannelMessageSend(floodAlertChannel, banUserMessage)
-		s.GuildBanCreateWithReason(m.GuildID, m.User.ID, "TARS flood ban", 1)
+		go func() {
+			banUserMessage := fmt.Sprintf("BAN - Terminate user: <@%s>", m.User.ID)
+			s.ChannelMessageSend(floodAlertChannel, banUserMessage)
+			s.GuildBanCreateWithReason(m.GuildID, m.User.ID, "TARS flood ban", 1)
+		}()
 	}
 
 	// Exit function if floodMemberAddInterval isn't hit
@@ -735,7 +738,7 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	// Flood check
 	t1 := time.Now()
 	diff := t1.Sub(floodMemberTimestamp)
-	if diff.Seconds() < floodSeconds {
+	if diff.Milliseconds() < floodMilliseconds {
 		if floodAlertTimestamp.IsZero() {
 			// Initialize to past time
 			floodAlertTimestamp = time.Now().Add(time.Second * time.Duration(-floodAlertSeconds*2))
@@ -745,38 +748,42 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 
 		// This should only fire once
 		if diffAlert.Seconds() > floodAlertSeconds {
-			floodMessage := fmt.Sprintf("<@&%s> 🚨 Flood detected. %d Joins in %.1f seconds. Shields ON - Increased verification level", moderatorID, floodMemberAddInterval, diff.Seconds())
-			s.ChannelMessageSend(floodAlertChannel, floodMessage)
 			floodAlertTimestamp = t1
 
 			// Shields on - Increase verification level
-			level := discordgo.VerificationLevelVeryHigh
-			gp := discordgo.GuildParams{"", "", &level, 0, "", 0, "", "", ""}
-			s.GuildEdit(m.GuildID, gp)
+			go func() {
+				floodMessage := fmt.Sprintf("<@&%s> 🚨 Flood detected. %d Joins in %.1f seconds. Shields ON - Increased verification level", moderatorID, floodMemberAddInterval, diff.Seconds())
+				s.ChannelMessageSend(floodAlertChannel, floodMessage)
+				level := discordgo.VerificationLevelVeryHigh
+				gp := discordgo.GuildParams{"", "", &level, 0, "", 0, "", "", ""}
+				s.GuildEdit(m.GuildID, gp)
+			}()
 
 			// Enable Terminator and Set Terminator timer
 			terminatorMemberFlag = true
-			terminatorOffMessage := fmt.Sprintf("Terminator OFF - You just can't go around killing people")
 			terminatorTimer := time.NewTicker(terminatorTimerSeconds * time.Second)
 			go func() {
 				<-terminatorTimer.C
 				terminatorMemberFlag = false
+				terminatorQuotes := []string{"You just can't go around killing people",
+					"Your foster parents are dead",
+					"Hasta la vista, baby",
+					"My mission is to protect you",
+					"Come with me if you want to live"}
+				terminatorOffMessage := fmt.Sprintf("Terminator OFF - %s", terminatorQuotes[rand.Intn(len(terminatorQuotes))])
 				s.ChannelMessageSend(floodAlertChannel, terminatorOffMessage)
 			}()
 
 			// Shields off - Restore default verification level after a timer
-			shieldsOffMessage := fmt.Sprintf("Shields OFF - Restored default verification level")
 			shieldsTimer := time.NewTimer(shieldsTimerSeconds * time.Second)
-
 			go func() {
 				<-shieldsTimer.C
-				level = discordgo.VerificationLevelMedium
-				gp = discordgo.GuildParams{"", "", &level, 0, "", 0, "", "", ""}
+				level := discordgo.VerificationLevelMedium
+				gp := discordgo.GuildParams{"", "", &level, 0, "", 0, "", "", ""}
 				s.GuildEdit(m.GuildID, gp)
-
+				shieldsOffMessage := fmt.Sprintf("Shields OFF - Restored default verification level")
 				s.ChannelMessageSend(floodAlertChannel, shieldsOffMessage)
 			}()
-
 		}
 	}
 	// Set new value
