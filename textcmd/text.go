@@ -65,7 +65,7 @@ func Commands(command string) *string {
 	case "!hide", "!hidechannels":
 		message = "<https://support.discordapp.com/hc/en-us/articles/213599277-How-do-I-hide-channels->\n"
 	case "!invite":
-		message = "`Ubiq Discord invite link:` <https://discord.gg/HF6vEGF>\n"
+		message = "`Ubiq Discord invite link:` <https://discord.gg/XaqzJB4>\n"
 	case "!miner":
 		message = "`Ubqminer:` <https://github.com/ubiq/ubqminer/releases> `PhoenixMiner:` <https://bitcointalk.org/index.php?topic=2647654.0> `TT-Miner:` <https://bitcointalk.org/index.php?topic=5025783.0> `Nanominer:` <https://nanominer.org/>\n"
 	case "!mp", "!monetarypolicy":
