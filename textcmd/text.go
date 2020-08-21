@@ -57,7 +57,7 @@ func Commands(command string) *string {
 	case "!ethunits":
 		message = "`Ethereum units:` <https://github.com/ryepdx/ethereum-units>\n"
 	case "!exchange", "!market":
-		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Litebit:` <https://www.litebit.eu/en/buy/ubiq> `UPBit:` <https://upbit.com/exchange?code=CRIX.UPBIT.BTC-UBQ> `Catalx:` <https://catalx.io/trade/BTC-UBQ> `Changeangel:` <https://changeangel.io> `Xchange.me:` <https://xchange.me> `SimpleSwap.io:` <https://simpleswap.io/coins/ubiq> `StealthEX.io:` <https://stealthex.io/coin/ubq> `Asymetrex:` <https://asymetrex.com/markets/ubqbtc> `SwapSpace:` <https://swapspace.co/?from=btc&to=ubq&amount=0.1>>\n"
+		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Litebit:` <https://www.litebit.eu/en/buy/ubiq> `UPBit:` <https://upbit.com/exchange?code=CRIX.UPBIT.BTC-UBQ> `Catalx:` <https://catalx.io/trade/BTC-UBQ> `Changeangel:` <https://changeangel.io> `Xchange.me:` <https://xchange.me> `SimpleSwap.io:` <https://simpleswap.io/coins/ubiq> `StealthEX.io:` <https://stealthex.io/coin/ubq> `Asymetrex:` <https://asymetrex.com/markets/ubqbtc> `SwapSpace:` <https://swapspace.co/?from=btc&to=ubq&amount=0.1>\n"
 	case "!explorer":
 		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <http://www.ubiq.cc> `Explorer 3:` <https://ubiqexplorer.com>\n"
 	case "!github":
