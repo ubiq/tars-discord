@@ -21,6 +21,7 @@ func Commands(command string) *string {
 		message += "`!bots` - Ubiq Twitter bots\n"
 		message += "`!caps` - Correct spelling for Ubiq\n"
 		message += "`!compare` - Comparison chart\n"
+		message += "`!dojo` - Guides to using Shinobi\n"
 		message += "`!escher` - Escher contract info\n"
 		message += "`!exchange / !market` - Ubiq exchanges\n"
 		message += "`!explorer` - Ubiq Block Explorer\n"
@@ -33,6 +34,7 @@ func Commands(command string) *string {
 		message += "`!pools` - Ubiq Pools List\n"
 		message += "`!resettabs / !blank` - Reset tabs in Fusion\n"
 		message += "`!roadmap / !quarterly` - Roadmap and Quarterly report\n"
+		message += "`!shinobi` - Access link and Info page for Shinobi\n"
 		message += "`!social` - Ubiq social media links\n"
 		message += "`!stats` - Ubiq network stats\n"
 		message += "`!ubqeur [AMOUNT]` - EUR conversion\n"
@@ -50,6 +52,10 @@ func Commands(command string) *string {
 		message = "The correct spelling for Ubiq is 'Ubiq', not all capitals (UBIQ is incorrect). This is similar to Nike where the logo is in all capitals but not the name. The ticker symbol for Ubiq is UBQ.\n"
 	case "!compare":
 		message = "`Comparison chart provided by user moreexplosions:` https://imgur.com/a/Kr8RW"
+	case "!dojo":
+		message = "`Introduction and making trades:` <https://blog.ubiqsmart.com/the-ubiq-dex-introducing-shinobi-5433adecc5e3>\n"
+		message += "`Using Sparrow:` <https://blog.ubiqsmart.com/the-ubiq-dex-using-sparrow-96bb604a1c89>\n"
+		message += "`Liquidity Pools:` <https://blog.ubiqsmart.com/the-ubiq-dex-liquidity-pools-6b1b1982c30a>\n"
 	case "!escher":
 		message = "`Escher contract address:` 0xcf3222b7FDa7a7563b9E1E6C966Bead04AC23c36  - Use default ABI and default 18 decimals."
 	case "!escrow":
@@ -84,6 +90,9 @@ func Commands(command string) *string {
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
 		message = "`Roadmap and quarterly report:` `February:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-march-2018-8ac54ca3eb78> `November:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-november-2017-2acc66750490> `August:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-august-2017-e6484a536b8d> `May:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-10-5-2017-9750e297330f>\n"
+	case "!shinobi":
+		message = "`You can access Shinobi by visiting:` <https://shinobi.ubiq.ninja>\n"
+		message += "`Information can be found at:` <https://info.ubiq.ninja>\n"
 	case "!social":
 		message = "Follow us on social media `Medium:` <https://blog.ubiqsmart.com> `Twitter:` <https://twitter.com/ubiqsmart> `YouTube:` <https://www.youtube.com/ubiqvideos> `Reddit:` <https://www.reddit.com/r/Ubiq/> `GitHub:` <https://github.com/ubiq> `BitcoinTalk:` <https://bitcointalk.org/index.php?topic=1763606.0> `Telegram:` <https://t.me/Ubiqsmart> `Wikipedia:` <https://en.wikipedia.org/wiki/Ubiq>\n"
 	case "!solidity":
