@@ -56,6 +56,7 @@ func Commands(command string) *string {
 		message = "`Introduction and making trades:` <https://blog.ubiqsmart.com/the-ubiq-dex-introducing-shinobi-5433adecc5e3>\n"
 		message += "`Using Sparrow:` <https://blog.ubiqsmart.com/the-ubiq-dex-using-sparrow-96bb604a1c89>\n"
 		message += "`Liquidity Pools:` <https://blog.ubiqsmart.com/the-ubiq-dex-liquidity-pools-6b1b1982c30a>\n"
+		message += "`Using Shinobi - Tips and Tricks to keep you safe:` <https://blog.ubiqsmart.com/using-shinobi-tips-and-tricks-to-keep-you-safe-8116e38b53b5>\n"
 	case "!escher":
 		message = "`Escher contract address:` 0xcf3222b7FDa7a7563b9E1E6C966Bead04AC23c36  - Use default ABI and default 18 decimals."
 	case "!escrow":
