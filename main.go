@@ -715,8 +715,12 @@ type floodCheck struct {
 
 func terminateMember(s *discordgo.Session, guildID string, userID string) {
 	banUserMessage := fmt.Sprintf("BAN - Terminate user: <@%s>", userID)
-	s.ChannelMessageSend(floodAlertChannel, banUserMessage)
-	s.GuildBanCreateWithReason(guildID, userID, "TARS flood ban", 1)
+	err := s.GuildBanCreateWithReason(guildID, userID, "TARS flood ban", 1)
+	if err != nil {
+		fmt.Printf("err: +%v\n", err)
+	} else {
+		s.ChannelMessageSend(floodAlertChannel, banUserMessage)
+	}
 }
 
 // This function is called on GuildMemberAdd event
