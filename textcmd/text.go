@@ -99,7 +99,7 @@ func Commands(command string) *string {
 	case "!solidity":
 		message = "`Solidity documentation:` <http://solidity.readthedocs.io>\n"
 	case "!stats":
-		message = "`Ubiq network stats:` <https://ubiq.darcr.us>\n"
+		message = "`Ubiq network stats:` <https://ubiq.gojupiter.tech>\n"
 	case "!verify", "!verified":
 		message = "__**Verified**__"
 		message += "\n"
