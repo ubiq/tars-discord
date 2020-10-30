@@ -90,7 +90,7 @@ func Commands(command string) *string {
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
-		message = "`Roadmap and quarterly report:` `February:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-march-2018-8ac54ca3eb78> `November:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-november-2017-2acc66750490> `August:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-august-2017-e6484a536b8d> `May:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-10-5-2017-9750e297330f>\n"
+		message = "`Roadmap and quarterly report:` <https://blog.ubiqsmart.com/tagged/monthly> \n"
 	case "!shinobi":
 		message = "`You can access Shinobi by visiting:` <https://shinobi.ubiq.ninja>\n"
 		message += "`Information can be found at:` <https://info.ubiq.ninja>\n"
