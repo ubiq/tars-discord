@@ -80,7 +80,7 @@ func Commands(command string) *string {
 	case "!nucleus", "!transparency":
 		message = "`Nucleus Transparency Report:` <https://blog.ubiqsmart.com/nucleus-transparency-report-6496e444bd85>\n"
 	case "!onepage":
-		message = "`Ubiq in one page`: <https://blog.ubiqsmart.com/ubiq-in-one-page-3e3d335064fc>\n"
+		message = "`Ubiq in one page`: <https://blog.ubiqsmart.com/ubiq-in-one-page-df1672fb85dd>\n"
 	case "!pools":
 		message = "`List of known mining pools:`\n"
 		message += "<https://ubq.mypool.online>\n"
