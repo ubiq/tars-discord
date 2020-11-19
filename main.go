@@ -259,7 +259,7 @@ func initializeBittrex(db *bolt.DB) (err error) {
 		return nil
 	})
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 	log.Println("initializeBittrex: END")
@@ -662,7 +662,7 @@ func main() {
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
-		fmt.Println("error creating Discord session,", err)
+		log.Println("error creating Discord session,", err)
 		return
 	}
 
@@ -670,18 +670,17 @@ func main() {
 	dg.AddHandler(messageCreate)
 	dg.AddHandler(guildMemberAdd)
 
-	dg.State.TrackPresences = false
-	dg.State.TrackVoice = false
+	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMembers | discordgo.IntentsGuildMessages)
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
 	if err != nil {
-		fmt.Println("error opening connection,", err)
+		log.Println("error opening connection,", err)
 		return
 	}
 
 	// Wait here until CTRL-C or other term signal is received.
-	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
+	log.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
@@ -717,7 +716,7 @@ func terminateMember(s *discordgo.Session, guildID string, userID string) {
 	banUserMessage := fmt.Sprintf("BAN - Terminate user: <@%s>", userID)
 	err := s.GuildBanCreateWithReason(guildID, userID, "TARS flood ban", 1)
 	if err != nil {
-		fmt.Printf("err: +%v\n", err)
+		log.Printf("err: +%v\n", err)
 	} else {
 		s.ChannelMessageSend(floodAlertChannel, banUserMessage)
 	}
@@ -726,7 +725,6 @@ func terminateMember(s *discordgo.Session, guildID string, userID string) {
 // This function is called on GuildMemberAdd event
 // Currently just performs Flood handling
 func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
-
 	// Check and Terminate
 	if terminatorMemberFlag {
 		go terminateMember(s, m.GuildID, m.User.ID)
