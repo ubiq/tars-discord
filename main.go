@@ -366,6 +366,100 @@ func btcPrice() *string {
 	return &message
 }
 
+func otherPrice(ticker *string) *string {
+	message := ""
+
+	var prices []string
+	var tickerHeader string
+	var bittrexUpdate bool
+	var poloniexUpdate bool
+
+	// Check Bittrex - Last updated
+	db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("bittrex"))
+		if b == nil {
+			log.Println(".. you need to initialize the pairs database by running: price refresh")
+		}
+		updated := b.Get([]byte("lastupdated"))
+		if updated != nil {
+			ts, err := strconv.Atoi(string(updated))
+			if err != nil {
+				return err
+			}
+			t := time.Unix(int64(ts), 0)
+			if time.Since(t).Seconds() > 3600 {
+				bittrexUpdate = true
+			}
+		}
+		return nil
+	})
+
+	// Check Bittrex
+	db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("bittrex"))
+		if b == nil {
+			log.Println(".. you need to initialize the pairs database by running: price refresh")
+		}
+		v := b.Get([]byte(*ticker))
+		if v != nil {
+			bittrexUpdate = false
+			tickerHeader = fmt.Sprintf("%s - %s", *ticker, v)
+			price := trexPrice(ticker)
+			prices = append(prices, *price)
+		}
+		return nil
+	})
+
+	// Check Poloniex - Last updated
+	db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("poloniex"))
+		if b == nil {
+			log.Println(".. you need to initialize the pairs database by running: price refresh")
+		}
+		updated := b.Get([]byte("lastupdated"))
+		if updated != nil {
+			ts, err := strconv.Atoi(string(updated))
+			if err != nil {
+				return err
+			}
+			t := time.Unix(int64(ts), 0)
+			if time.Since(t).Seconds() > 3600 {
+				poloniexUpdate = true
+			}
+		}
+		return nil
+	})
+
+	// Check Poloniex
+	db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("poloniex"))
+		if b == nil {
+			log.Println(".. you need to initialize the pairs database by running: price refresh")
+		}
+		v := b.Get([]byte(*ticker))
+		if v != nil {
+			poloniexUpdate = false
+			if tickerHeader == "" {
+				tickerHeader = fmt.Sprintf("%s - %s", *ticker, v)
+			}
+			price := poloPrice(ticker)
+			prices = append(prices, *price)
+		}
+		return nil
+	})
+
+	if bittrexUpdate {
+		initializeBittrex(db)
+	}
+	if poloniexUpdate {
+		initializePoloniex(db)
+	}
+
+	message = *generatePriceMessage(prices, tickerHeader)
+
+	return &message
+}
+
 func keysString(m map[string]bool) string {
 	keys := make([]string, 0, len(m))
 	for k := range m {
@@ -416,99 +510,12 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		// Special case to handle BTC price
 		if ticker == "BTC" {
 			message = *btcPrice()
-			break
+		} else {
+			message = *otherPrice(&ticker)
 		}
-
-		var prices []string
-		var tickerHeader string
-		var bittrexUpdate bool
-		var poloniexUpdate bool
-
-		// Check Bittrex - Last updated
-		db.View(func(tx *bolt.Tx) error {
-			b := tx.Bucket([]byte("bittrex"))
-			if b == nil {
-				log.Println(".. you need to initialize the pairs database by running: price refresh")
-			}
-			updated := b.Get([]byte("lastupdated"))
-			if updated != nil {
-				ts, err := strconv.Atoi(string(updated))
-				if err != nil {
-					return err
-				}
-				t := time.Unix(int64(ts), 0)
-				if time.Since(t).Seconds() > 3600 {
-					bittrexUpdate = true
-				}
-			}
-			return nil
-		})
-
-		// Check Bittrex
-		db.View(func(tx *bolt.Tx) error {
-			b := tx.Bucket([]byte("bittrex"))
-			if b == nil {
-				log.Println(".. you need to initialize the pairs database by running: price refresh")
-			}
-			v := b.Get([]byte(ticker))
-			if v != nil {
-				bittrexUpdate = false
-				tickerHeader = fmt.Sprintf("%s - %s", ticker, v)
-				price := trexPrice(&ticker)
-				prices = append(prices, *price)
-			}
-			return nil
-		})
-
-		// Check Poloniex - Last updated
-		db.View(func(tx *bolt.Tx) error {
-			b := tx.Bucket([]byte("poloniex"))
-			if b == nil {
-				log.Println(".. you need to initialize the pairs database by running: price refresh")
-			}
-			updated := b.Get([]byte("lastupdated"))
-			if updated != nil {
-				ts, err := strconv.Atoi(string(updated))
-				if err != nil {
-					return err
-				}
-				t := time.Unix(int64(ts), 0)
-				if time.Since(t).Seconds() > 3600 {
-					poloniexUpdate = true
-				}
-			}
-			return nil
-		})
-
-		// Check Poloniex
-		db.View(func(tx *bolt.Tx) error {
-			b := tx.Bucket([]byte("poloniex"))
-			if b == nil {
-				log.Println(".. you need to initialize the pairs database by running: price refresh")
-			}
-			v := b.Get([]byte(ticker))
-			if v != nil {
-				poloniexUpdate = false
-				if tickerHeader == "" {
-					tickerHeader = fmt.Sprintf("%s - %s", ticker, v)
-				}
-				price := poloPrice(&ticker)
-				prices = append(prices, *price)
-			}
-			return nil
-		})
-
-		if bittrexUpdate {
-			initializeBittrex(db)
-		}
-		if poloniexUpdate {
-			initializePoloniex(db)
-		}
-
 		// Delete originating message
 		s.ChannelMessageDelete(m.ChannelID, m.ID)
 
-		message = *generatePriceMessage(prices, tickerHeader)
 		message = fmt.Sprintf("%sRequested by: %s", message, m.Author.Mention())
 	case "!pricerefresh":
 		// Refresh coin pairs in Bolt DB
