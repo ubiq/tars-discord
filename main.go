@@ -474,7 +474,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 	vals := &m.Content
 	uniSpamMatched, _ := regexp.MatchString(`[uU]n[iⅰ]ѕwap.*a[iⅰ]rdrop`, *vals)
 	if uniSpamMatched && len(m.Member.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.Author.ID, "Spam ban")
+		go terminateMember(s, m.GuildID, m.Author.ID, "Uniswap spam")
 		return nil
 	}
 	valSplit := strings.Split(*vals, " ")
@@ -728,7 +728,7 @@ type floodCheck struct {
 }
 
 func terminateMember(s *discordgo.Session, guildID string, userID string, reason string) {
-	banUserMessage := fmt.Sprintf("BAN - Terminate user: <@%s>", userID)
+	banUserMessage := fmt.Sprintf("Terminated: <@%s>, Reason: %s", userID, reason)
 	err := s.GuildBanCreateWithReason(guildID, userID, reason, 1)
 	if err != nil {
 		log.Printf("err: +%v\n", err)
@@ -742,7 +742,7 @@ func terminateMember(s *discordgo.Session, guildID string, userID string, reason
 func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	// Check and Terminate
 	if terminatorMemberFlag {
-		go terminateMember(s, m.GuildID, m.User.ID, "Flood ban")
+		go terminateMember(s, m.GuildID, m.User.ID, "Flood join")
 		return
 	}
 
@@ -757,7 +757,7 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 			// Terminate all members in floodStack
 			terminatorMemberFlag = true
 			for member := floodStack.Front(); member != nil; member = member.Next() {
-				go terminateMember(s, m.GuildID, member.Value.(floodCheck).userID, "Flood ban")
+				go terminateMember(s, m.GuildID, member.Value.(floodCheck).userID, "Flood join")
 			}
 
 			// Set TerminatorTimer
