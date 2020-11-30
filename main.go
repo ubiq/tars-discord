@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"syscall"
@@ -471,6 +472,11 @@ func keysString(m map[string]bool) string {
 func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 
 	vals := &m.Content
+	uniSpamMatched, _ := regexp.MatchString(`[uU]n[iⅰ]ѕwap.*a[iⅰ]rdrop`, *vals)
+	if uniSpamMatched && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.Author.ID, "Spam ban")
+		return nil
+	}
 	valSplit := strings.Split(*vals, " ")
 	message := ""
 
@@ -708,7 +714,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if len(m.Content) > 0 {
 		message := handleMessage(s, m)
-		s.ChannelMessageSend(m.ChannelID, *message)
+		if message != nil {
+			s.ChannelMessageSend(m.ChannelID, *message)
+		}
 	}
 }
 
@@ -719,9 +727,9 @@ type floodCheck struct {
 	addTime time.Time
 }
 
-func terminateMember(s *discordgo.Session, guildID string, userID string) {
+func terminateMember(s *discordgo.Session, guildID string, userID string, reason string) {
 	banUserMessage := fmt.Sprintf("BAN - Terminate user: <@%s>", userID)
-	err := s.GuildBanCreateWithReason(guildID, userID, "TARS flood ban", 1)
+	err := s.GuildBanCreateWithReason(guildID, userID, reason, 1)
 	if err != nil {
 		log.Printf("err: +%v\n", err)
 	} else {
@@ -734,7 +742,7 @@ func terminateMember(s *discordgo.Session, guildID string, userID string) {
 func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	// Check and Terminate
 	if terminatorMemberFlag {
-		go terminateMember(s, m.GuildID, m.User.ID)
+		go terminateMember(s, m.GuildID, m.User.ID, "Flood ban")
 		return
 	}
 
@@ -749,7 +757,7 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 			// Terminate all members in floodStack
 			terminatorMemberFlag = true
 			for member := floodStack.Front(); member != nil; member = member.Next() {
-				go terminateMember(s, m.GuildID, member.Value.(floodCheck).userID)
+				go terminateMember(s, m.GuildID, member.Value.(floodCheck).userID, "Flood ban")
 			}
 
 			// Set TerminatorTimer
