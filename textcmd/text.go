@@ -74,7 +74,7 @@ func Commands(command string) *string {
 	case "!invite":
 		message = "`Ubiq Discord invite link:` <https://discord.gg/XaqzJB4>\n"
 	case "!miner":
-		message = "`Ubqminer (0%% dev fee):` <https://github.com/ubiq/ubqminer/releases> `PhoenixMiner (0.65%% dev fee):` <https://bitcointalk.org/index.php?topic=2647654.0> `TT-Miner (1%% dev fee):` <https://bitcointalk.org/index.php?topic=5025783.0> `Nanominer (1%% dev fee):` <https://nanominer.org/> `SRBMiner (0.65%% dev fee):` <https://bitcointalk.org/index.php?topic=5190081.0>\n"
+		message = "`Ubqminer (0% dev fee):` <https://github.com/ubiq/ubqminer/releases> `PhoenixMiner (0.65% dev fee):` <https://bitcointalk.org/index.php?topic=2647654.0> `TT-Miner (1% dev fee):` <https://bitcointalk.org/index.php?topic=5025783.0> `Nanominer (1% dev fee):` <https://nanominer.org/> `SRBMiner (0.65% dev fee):` <https://bitcointalk.org/index.php?topic=5190081.0>\n"
 	case "!mp", "!monetarypolicy":
 		message = "`Monetary policy and mining block rewards scheme in Ubiq:` <https://blog.ubiqsmart.com/ubiq-research-monetary-policy-2e27458983ec>\n"
 	case "!nucleus", "!transparency":
