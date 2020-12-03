@@ -14,9 +14,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/boltdb/bolt"
 	"github.com/bwmarrin/discordgo"
-	"github.com/decred/dcrd/dcrutil/v2"
+	"github.com/decred/dcrd/dcrutil/v3"
 	"github.com/joho/godotenv"
 	"github.com/jpatel888/go-bitstamp"
 	"github.com/jyap808/go-gemini"
@@ -25,6 +24,7 @@ import (
 	"github.com/toorop/go-bittrex"
 	"github.com/ubiq/tars-discord/optionalchannelscmd"
 	"github.com/ubiq/tars-discord/textcmd"
+	bolt "go.etcd.io/bbolt"
 )
 
 // Variables used for command line parameters
