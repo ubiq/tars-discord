@@ -477,6 +477,11 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		go terminateMember(s, m.GuildID, m.Author.ID, "Uniswap spam")
 		return nil
 	}
+	axieInfinitySpamMatched, _ := regexp.MatchString(`[aA]x[iⅰ]e.*[iI]nf[iⅰ]n[iⅰ]ty`, *vals)
+	if axieInfinitySpamMatched && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.Author.ID, "Axie Infinity spam")
+		return nil
+	}
 	valSplit := strings.Split(*vals, " ")
 	message := ""
 
