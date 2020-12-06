@@ -13,6 +13,7 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	"unicode"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/decred/dcrd/dcrutil/v3"
@@ -469,9 +470,24 @@ func keysString(m map[string]bool) string {
 	return strings.Join(keys, ", ")
 }
 
+func isASCII(s string) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] > unicode.MaxASCII {
+			return false
+		}
+	}
+	return true
+}
+
 func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 
 	vals := &m.Content
+	asciiMatched := isASCII(*vals)
+	httpMatched, _ := regexp.MatchString(`http`, *vals)
+	if !asciiMatched && httpMatched && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.Author.ID, "Generic spam")
+		return nil
+	}
 	uniSpamMatched, _ := regexp.MatchString(`[uU]n[iⅰ].*a[iⅰ]r[dԁ]rop`, *vals)
 	if uniSpamMatched && len(m.Member.Roles) == 0 {
 		go terminateMember(s, m.GuildID, m.Author.ID, "Uniswap spam")
