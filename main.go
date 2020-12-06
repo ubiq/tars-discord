@@ -472,7 +472,7 @@ func keysString(m map[string]bool) string {
 func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 
 	vals := &m.Content
-	uniSpamMatched, _ := regexp.MatchString(`[uU]n[iⅰ][sѕ]wap.*a[iⅰ]r[dԁ]rop`, *vals)
+	uniSpamMatched, _ := regexp.MatchString(`[uU]n[iⅰ].*a[iⅰ]r[dԁ]rop`, *vals)
 	if uniSpamMatched && len(m.Member.Roles) == 0 {
 		go terminateMember(s, m.GuildID, m.Author.ID, "Uniswap spam")
 		return nil
