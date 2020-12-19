@@ -84,7 +84,7 @@ func Commands(command string) *string {
 	case "!pools":
 		message = "`List of known mining pools:`\n"
 		message += "<https://ubq.mypool.online>\n"
-		message += "<https://ubq.zet-tech.eu> <https://ubiqpool.maxhash.org>\n"
+		message += "<https://comining.io> <https://ubiqpool.maxhash.org>\n"
 		message += "<https://ubiqpool.io>		<https://ubiq.clona.ru>\n"
 		message += "<https://ubq.solopool.org>     <https://ubiq.wattpool.net>\n"
 	case "!resettabs", "!blank":
