@@ -8,14 +8,15 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"syscall"
 	"time"
+	"unicode"
 
-	"github.com/boltdb/bolt"
 	"github.com/bwmarrin/discordgo"
-	"github.com/decred/dcrd/dcrutil/v2"
+	"github.com/decred/dcrd/dcrutil/v3"
 	"github.com/joho/godotenv"
 	"github.com/jpatel888/go-bitstamp"
 	"github.com/jyap808/go-gemini"
@@ -24,6 +25,7 @@ import (
 	"github.com/toorop/go-bittrex"
 	"github.com/ubiq/tars-discord/optionalchannelscmd"
 	"github.com/ubiq/tars-discord/textcmd"
+	bolt "go.etcd.io/bbolt"
 )
 
 // Variables used for command line parameters
@@ -259,7 +261,7 @@ func initializeBittrex(db *bolt.DB) (err error) {
 		return nil
 	})
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 	log.Println("initializeBittrex: END")
@@ -366,6 +368,100 @@ func btcPrice() *string {
 	return &message
 }
 
+func otherPrice(ticker *string) *string {
+	message := ""
+
+	var prices []string
+	var tickerHeader string
+	var bittrexUpdate bool
+	var poloniexUpdate bool
+
+	// Check Bittrex - Last updated
+	db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("bittrex"))
+		if b == nil {
+			log.Println(".. you need to initialize the pairs database by running: price refresh")
+		}
+		updated := b.Get([]byte("lastupdated"))
+		if updated != nil {
+			ts, err := strconv.Atoi(string(updated))
+			if err != nil {
+				return err
+			}
+			t := time.Unix(int64(ts), 0)
+			if time.Since(t).Seconds() > 3600 {
+				bittrexUpdate = true
+			}
+		}
+		return nil
+	})
+
+	// Check Bittrex
+	db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("bittrex"))
+		if b == nil {
+			log.Println(".. you need to initialize the pairs database by running: price refresh")
+		}
+		v := b.Get([]byte(*ticker))
+		if v != nil {
+			bittrexUpdate = false
+			tickerHeader = fmt.Sprintf("%s - %s", *ticker, v)
+			price := trexPrice(ticker)
+			prices = append(prices, *price)
+		}
+		return nil
+	})
+
+	// Check Poloniex - Last updated
+	db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("poloniex"))
+		if b == nil {
+			log.Println(".. you need to initialize the pairs database by running: price refresh")
+		}
+		updated := b.Get([]byte("lastupdated"))
+		if updated != nil {
+			ts, err := strconv.Atoi(string(updated))
+			if err != nil {
+				return err
+			}
+			t := time.Unix(int64(ts), 0)
+			if time.Since(t).Seconds() > 3600 {
+				poloniexUpdate = true
+			}
+		}
+		return nil
+	})
+
+	// Check Poloniex
+	db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("poloniex"))
+		if b == nil {
+			log.Println(".. you need to initialize the pairs database by running: price refresh")
+		}
+		v := b.Get([]byte(*ticker))
+		if v != nil {
+			poloniexUpdate = false
+			if tickerHeader == "" {
+				tickerHeader = fmt.Sprintf("%s - %s", *ticker, v)
+			}
+			price := poloPrice(ticker)
+			prices = append(prices, *price)
+		}
+		return nil
+	})
+
+	if bittrexUpdate {
+		initializeBittrex(db)
+	}
+	if poloniexUpdate {
+		initializePoloniex(db)
+	}
+
+	message = *generatePriceMessage(prices, tickerHeader)
+
+	return &message
+}
+
 func keysString(m map[string]bool) string {
 	keys := make([]string, 0, len(m))
 	for k := range m {
@@ -374,9 +470,34 @@ func keysString(m map[string]bool) string {
 	return strings.Join(keys, ", ")
 }
 
+func isASCII(s string) bool {
+	for i := 0; i < len(s); i++ {
+		if s[i] > unicode.MaxASCII {
+			return false
+		}
+	}
+	return true
+}
+
 func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 
 	vals := &m.Content
+	asciiMatched := isASCII(*vals)
+	httpMatched, _ := regexp.MatchString(`http`, *vals)
+	if !asciiMatched && httpMatched && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.Author.ID, "Generic spam")
+		return nil
+	}
+	uniSpamMatched, _ := regexp.MatchString(`[uU]n[iⅰ].*a[iⅰ]r[dԁ]rop`, *vals)
+	if uniSpamMatched && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.Author.ID, "Uniswap spam")
+		return nil
+	}
+	axieInfinitySpamMatched, _ := regexp.MatchString(`[aA]x[iⅰ]e.*[iI]nf[iⅰ]n[iⅰ]ty`, *vals)
+	if axieInfinitySpamMatched && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.Author.ID, "Axie Infinity spam")
+		return nil
+	}
 	valSplit := strings.Split(*vals, " ")
 	message := ""
 
@@ -416,99 +537,12 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		// Special case to handle BTC price
 		if ticker == "BTC" {
 			message = *btcPrice()
-			break
+		} else {
+			message = *otherPrice(&ticker)
 		}
-
-		var prices []string
-		var tickerHeader string
-		var bittrexUpdate bool
-		var poloniexUpdate bool
-
-		// Check Bittrex - Last updated
-		db.View(func(tx *bolt.Tx) error {
-			b := tx.Bucket([]byte("bittrex"))
-			if b == nil {
-				log.Println(".. you need to initialize the pairs database by running: price refresh")
-			}
-			updated := b.Get([]byte("lastupdated"))
-			if updated != nil {
-				ts, err := strconv.Atoi(string(updated))
-				if err != nil {
-					return err
-				}
-				t := time.Unix(int64(ts), 0)
-				if time.Since(t).Seconds() > 3600 {
-					bittrexUpdate = true
-				}
-			}
-			return nil
-		})
-
-		// Check Bittrex
-		db.View(func(tx *bolt.Tx) error {
-			b := tx.Bucket([]byte("bittrex"))
-			if b == nil {
-				log.Println(".. you need to initialize the pairs database by running: price refresh")
-			}
-			v := b.Get([]byte(ticker))
-			if v != nil {
-				bittrexUpdate = false
-				tickerHeader = fmt.Sprintf("%s - %s", ticker, v)
-				price := trexPrice(&ticker)
-				prices = append(prices, *price)
-			}
-			return nil
-		})
-
-		// Check Poloniex - Last updated
-		db.View(func(tx *bolt.Tx) error {
-			b := tx.Bucket([]byte("poloniex"))
-			if b == nil {
-				log.Println(".. you need to initialize the pairs database by running: price refresh")
-			}
-			updated := b.Get([]byte("lastupdated"))
-			if updated != nil {
-				ts, err := strconv.Atoi(string(updated))
-				if err != nil {
-					return err
-				}
-				t := time.Unix(int64(ts), 0)
-				if time.Since(t).Seconds() > 3600 {
-					poloniexUpdate = true
-				}
-			}
-			return nil
-		})
-
-		// Check Poloniex
-		db.View(func(tx *bolt.Tx) error {
-			b := tx.Bucket([]byte("poloniex"))
-			if b == nil {
-				log.Println(".. you need to initialize the pairs database by running: price refresh")
-			}
-			v := b.Get([]byte(ticker))
-			if v != nil {
-				poloniexUpdate = false
-				if tickerHeader == "" {
-					tickerHeader = fmt.Sprintf("%s - %s", ticker, v)
-				}
-				price := poloPrice(&ticker)
-				prices = append(prices, *price)
-			}
-			return nil
-		})
-
-		if bittrexUpdate {
-			initializeBittrex(db)
-		}
-		if poloniexUpdate {
-			initializePoloniex(db)
-		}
-
 		// Delete originating message
 		s.ChannelMessageDelete(m.ChannelID, m.ID)
 
-		message = *generatePriceMessage(prices, tickerHeader)
 		message = fmt.Sprintf("%sRequested by: %s", message, m.Author.Mention())
 	case "!pricerefresh":
 		// Refresh coin pairs in Bolt DB
@@ -662,7 +696,7 @@ func main() {
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New("Bot " + token)
 	if err != nil {
-		fmt.Println("error creating Discord session,", err)
+		log.Println("error creating Discord session,", err)
 		return
 	}
 
@@ -670,18 +704,17 @@ func main() {
 	dg.AddHandler(messageCreate)
 	dg.AddHandler(guildMemberAdd)
 
-	dg.State.TrackPresences = false
-	dg.State.TrackVoice = false
+	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMembers | discordgo.IntentsGuildMessages)
 
 	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
 	if err != nil {
-		fmt.Println("error opening connection,", err)
+		log.Println("error opening connection,", err)
 		return
 	}
 
 	// Wait here until CTRL-C or other term signal is received.
-	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
+	log.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
@@ -702,7 +735,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if len(m.Content) > 0 {
 		message := handleMessage(s, m)
-		s.ChannelMessageSend(m.ChannelID, *message)
+		if message != nil {
+			s.ChannelMessageSend(m.ChannelID, *message)
+		}
 	}
 }
 
@@ -713,19 +748,22 @@ type floodCheck struct {
 	addTime time.Time
 }
 
-func terminateMember(s *discordgo.Session, guildID string, userID string) {
-	banUserMessage := fmt.Sprintf("BAN - Terminate user: <@%s>", userID)
-	s.ChannelMessageSend(floodAlertChannel, banUserMessage)
-	s.GuildBanCreateWithReason(guildID, userID, "TARS flood ban", 1)
+func terminateMember(s *discordgo.Session, guildID string, userID string, reason string) {
+	banUserMessage := fmt.Sprintf("Terminated: <@%s>, Reason: %s", userID, reason)
+	err := s.GuildBanCreateWithReason(guildID, userID, reason, 1)
+	if err != nil {
+		log.Printf("err: +%v\n", err)
+	} else {
+		s.ChannelMessageSend(floodAlertChannel, banUserMessage)
+	}
 }
 
 // This function is called on GuildMemberAdd event
 // Currently just performs Flood handling
 func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
-
 	// Check and Terminate
 	if terminatorMemberFlag {
-		go terminateMember(s, m.GuildID, m.User.ID)
+		go terminateMember(s, m.GuildID, m.User.ID, "Flood join")
 		return
 	}
 
@@ -740,7 +778,7 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 			// Terminate all members in floodStack
 			terminatorMemberFlag = true
 			for member := floodStack.Front(); member != nil; member = member.Next() {
-				go terminateMember(s, m.GuildID, member.Value.(floodCheck).userID)
+				go terminateMember(s, m.GuildID, member.Value.(floodCheck).userID, "Flood join")
 			}
 
 			// Set TerminatorTimer

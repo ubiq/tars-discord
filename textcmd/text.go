@@ -64,7 +64,7 @@ func Commands(command string) *string {
 	case "!ethunits":
 		message = "`Ethereum units:` <https://github.com/ryepdx/ethereum-units>\n"
 	case "!exchange", "!market":
-		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Litebit:` <https://www.litebit.eu/en/buy/ubiq> `UPBit:` <https://upbit.com/exchange?code=CRIX.UPBIT.BTC-UBQ> `Catalx:` <https://catalx.io/trade/BTC-UBQ> `Changeangel:` <https://changeangel.io> `Xchange.me:` <https://xchange.me> `SimpleSwap.io:` <https://simpleswap.io/coins/ubiq> `StealthEX.io:` <https://stealthex.io/coin/ubq> `Asymetrex:` <https://asymetrex.com/markets/ubqbtc> `SwapSpace:` <https://swapspace.co/?from=btc&to=ubq&amount=0.1>\n"
+		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Litebit:` <https://www.litebit.eu/en/buy/ubiq> `Catalx:` <https://catalx.io/trade/BTC-UBQ> `Changeangel:` <https://changeangel.io> `Xchange.me:` <https://xchange.me> `SimpleSwap.io:` <https://simpleswap.io/coins/ubiq> `StealthEX.io:` <https://stealthex.io/coin/ubq> `Asymetrex:` <https://asymetrex.com/markets/ubqbtc> `SwapSpace:` <https://swapspace.co/?from=btc&to=ubq&amount=0.1>\n"
 	case "!explorer":
 		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <https://ubiqexplorer.com>\n"
 	case "!github":
@@ -74,23 +74,23 @@ func Commands(command string) *string {
 	case "!invite":
 		message = "`Ubiq Discord invite link:` <https://discord.gg/XaqzJB4>\n"
 	case "!miner":
-		message = "`Ubqminer:` <https://github.com/ubiq/ubqminer/releases> `PhoenixMiner:` <https://bitcointalk.org/index.php?topic=2647654.0> `TT-Miner:` <https://bitcointalk.org/index.php?topic=5025783.0> `Nanominer:` <https://nanominer.org/>\n"
+		message = "`Ubqminer (0% dev fee):` <https://github.com/ubiq/ubqminer/releases> `PhoenixMiner (0.65% dev fee):` <https://bitcointalk.org/index.php?topic=2647654.0> `TT-Miner (1% dev fee):` <https://bitcointalk.org/index.php?topic=5025783.0> `Nanominer (1% dev fee):` <https://nanominer.org/> `SRBMiner (0.65% dev fee):` <https://www.srbminer.com>\n"
 	case "!mp", "!monetarypolicy":
 		message = "`Monetary policy and mining block rewards scheme in Ubiq:` <https://blog.ubiqsmart.com/ubiq-research-monetary-policy-2e27458983ec>\n"
 	case "!nucleus", "!transparency":
 		message = "`Nucleus Transparency Report:` <https://blog.ubiqsmart.com/nucleus-transparency-report-6496e444bd85>\n"
 	case "!onepage":
-		message = "`Ubiq in one page`: <https://blog.ubiqsmart.com/ubiq-in-one-page-3e3d335064fc>\n"
+		message = "`Ubiq in one page`: <https://blog.ubiqsmart.com/ubiq-in-one-page-df1672fb85dd>\n"
 	case "!pools":
 		message = "`List of known mining pools:`\n"
 		message += "<https://ubq.mypool.online>\n"
-		message += "<https://ubq.zet-tech.eu> <https://ubiqpool.maxhash.org>\n"
+		message += "<https://comining.io> <https://ubiqpool.maxhash.org>\n"
 		message += "<https://ubiqpool.io>		<https://ubiq.clona.ru>\n"
 		message += "<https://ubq.solopool.org>     <https://ubiq.wattpool.net>\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
-		message = "`Roadmap and quarterly report:` `February:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-march-2018-8ac54ca3eb78> `November:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-november-2017-2acc66750490> `August:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-august-2017-e6484a536b8d> `May:` <https://blog.ubiqsmart.com/ubiq-quarterly-report-10-5-2017-9750e297330f>\n"
+		message = "`Roadmap and quarterly report:` <https://blog.ubiqsmart.com/tagged/monthly> \n"
 	case "!shinobi":
 		message = "`You can access Shinobi by visiting:` <https://shinobi.ubiq.ninja>\n"
 		message += "`Information can be found at:` <https://info.ubiq.ninja>\n"
@@ -99,7 +99,7 @@ func Commands(command string) *string {
 	case "!solidity":
 		message = "`Solidity documentation:` <http://solidity.readthedocs.io>\n"
 	case "!stats":
-		message = "`Ubiq network stats:` <https://ubiq.darcr.us>\n"
+		message = "`Ubiq network stats:` <https://ubiq.gojupiter.tech>\n"
 	case "!verify", "!verified":
 		message = "__**Verified**__"
 		message += "\n"
