@@ -14,7 +14,6 @@ func Commands(command string) *string {
 		message += "`!hide / !hidechannels` - Tutorial on Hiding Discord Channels\n"
 		message += "`!invite` - Ubiq Discord Invite Link\n"
 		message += "`!price [TICKER]` - Price look ups\n"
-		message += "`!verify` - How to get Verified on Ubiq Discord\n"
 		message += "\n"
 		message += "__**Ubiq specific**__\n\n"
 		message += "`!backup` - Backup your account\n"
@@ -67,7 +66,7 @@ func Commands(command string) *string {
 	case "!ethunits":
 		message = "`Ethereum units:` <https://github.com/ryepdx/ethereum-units>\n"
 	case "!exchange", "!market":
-		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Litebit:` <https://www.litebit.eu/en/buy/ubiq> `Catalx:` <https://catalx.io/trade/BTC-UBQ> `Changeangel:` <https://changeangel.io> `Xchange.me:` <https://xchange.me> `SimpleSwap.io:` <https://simpleswap.io/coins/ubiq> `StealthEX.io:` <https://stealthex.io/coin/ubq> `Asymetrex:` <https://asymetrex.com/markets/ubqbtc> `SwapSpace:` <https://swapspace.co/?from=btc&to=ubq&amount=0.1>\n"
+		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Litebit:` <https://www.litebit.eu/en/buy/ubiq> `Catalx:` <https://catalx.io/trade/BTC-UBQ> `Asymetrex:` <https://asymetrex.com/markets/ubqbtc>\n"
 	case "!explorer":
 		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <https://ubiqexplorer.com>\n"
 	case "!github":
@@ -107,8 +106,6 @@ func Commands(command string) *string {
 		message = "`Web:` <https://pyrus.ubiqsmart.com> `Web2:` <https://myetherwallet.com> `GUI:` <https://github.com/ubiq/fusion/releases> `CLI:` <https://github.com/ubiq/go-ubiq/releases>\n"
 	case "!website", "!site":
 		message = "`Ubiq website:` <http://ubiqsmart.com/>	`Ubiq Community website:` <https://www.ubiqescher.com/>\n"
-	case "!shokku":
-		message = "If you are familiar with Infura <https://infura.io> on Ethereum, Shokku (<https://shokku.com> - website will be available soon) provides the same functionality (public API for dapps to interact directly with the chain without running their own nodes, and ipfs). Something to note is that this project is not based on forked code, it has been written from scratch as Infura is not open source. If you want more information or need assitance to use the service, just ping aldoborrero.\n"
 	case "!vyper":
 		message = "`Vyper documentation:` <http://vyper.readthedocs.io>\n"
 	}
