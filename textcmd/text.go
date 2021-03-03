@@ -89,7 +89,7 @@ func Commands(command string) *string {
 		message += "<https://comining.io> <https://ubiqpool.maxhash.org>\n"
 		message += "<https://ubiqpool.io>		<https://ubiq.clona.ru>\n"
 		message += "<https://ubq.solopool.org>     <https://ubiq.wattpool.net>\n"
-		message += "<https://https://ubiq.phoenixmax.org>\n"
+		message += "<https://ubiq.phoenixmax.org>\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
