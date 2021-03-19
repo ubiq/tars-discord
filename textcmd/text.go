@@ -66,7 +66,7 @@ func Commands(command string) *string {
 	case "!ethunits":
 		message = "`Ethereum units:` <https://github.com/ryepdx/ethereum-units>\n"
 	case "!exchange", "!market":
-		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Litebit:` <https://www.litebit.eu/en/buy/ubiq> `Catalx:` <https://catalx.io/trade/BTC-UBQ> `Asymetrex:` <https://asymetrex.com/markets/ubqbtc>\n"
+		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Catalx:` <https://catalx.io/trade/BTC-UBQ> `Asymetrex:` <https://asymetrex.com/markets/ubqbtc>\n"
 	case "!explorer":
 		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <https://ubiqexplorer.com>\n"
 	case "!github":
@@ -103,7 +103,7 @@ func Commands(command string) *string {
 	case "!solidity":
 		message = "`Solidity documentation:` <http://solidity.readthedocs.io>\n"
 	case "!stats":
-		message = "`Ubiq network stats:` <https://ubiq.gojupiter.tech>\n"
+		message = "`Ubiq network stats:` <https://stats.ubiqscan.io>\n"
 	case "!wallet":
 		message = "`Web:` <https://pyrus.ubiqsmart.com> `Web2:` <https://myetherwallet.com> `GUI:` <https://github.com/ubiq/fusion/releases> `CLI:` <https://github.com/ubiq/go-ubiq/releases>\n"
 	case "!website", "!site":
