@@ -66,7 +66,11 @@ func Commands(command string) *string {
 	case "!ethunits":
 		message = "`Ethereum units:` <https://github.com/ryepdx/ethereum-units>\n"
 	case "!exchange", "!market":
-		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ> `Catalx:` <https://catalx.io/trade/BTC-UBQ> `Asymetrex:` <https://asymetrex.com/markets/ubqbtc>\n"
+		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ>\n"
+		message += "`Dove Wallet:` <https://dovewallet.com/en/trade/spot/ubq-usdt>\n"
+		message += "`BitZ:` <https://www.bitz.cm/en/exchange/ubq_usdt>\n"
+		message += "`Catalx:` <https://catalx.io/trade/BTC-UBQ>\n"
+		message += "`Asymetrex:` <https://asymetrex.com/markets/ubqbtc>\n"
 	case "!explorer":
 		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <https://ubiqexplorer.com>\n"
 	case "!github":
