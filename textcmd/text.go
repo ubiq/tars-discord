@@ -18,6 +18,7 @@ func Commands(command string) *string {
 		message += "\n"
 		message += "__**Ubiq specific**__\n\n"
 		message += "`!backup` - Backup your account\n"
+		message += "`!bridge / !redshift` - Ubiq Redshift bridge information\n"
 		message += "`!bots` - Ubiq Twitter bots\n"
 		message += "`!caps` - Correct spelling for Ubiq\n"
 		message += "`!compare` - Comparison chart\n"
@@ -48,6 +49,10 @@ func Commands(command string) *string {
 		message = "To backup your wallet file(s), save every file in the following directories: Mac: `~/Library/Ubiq/keystore` Linux: `~/.ubiq/keystore` Windows: `%APPDATA%/Ubiq/keystore` *Note that each time you create a new account a new file will be created, so you must back up the new file in that directory when you create a new account.* The following video will help you on Windows: https://www.youtube.com/watch?v=x5tNtKpnkMw\n"
 	case "!bots":
 		message = "`Ubiq new coin bot:` <https://twitter.com/ubiqcoinbot> `Ubiq BCT ANN bot:` <https://twitter.com/ubiqannbot>\n"
+	case "!bridge", "!redshift":
+		message = "`Wrapped Ubiq (WUBQ) Contract:` <https://ubiqscan.io/address/0x1fa6a37c64804c0d797ba6bc1955e50068fbf362>\n"
+		message += "`Polygon WUBQ Contract:` <https://polygonscan.com/token/0xb1c5c9b97b35592777091cd34ffff141ae866abd>\n"
+		message += "`Quickswap WETH-WUBQ Pair:` <https://info.quickswap.exchange/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949>\n"
 	case "!caps":
 		message = "The correct spelling for Ubiq is 'Ubiq', not all capitals (UBIQ is incorrect). This is similar to Nike where the logo is in all capitals but not the name. The ticker symbol for Ubiq is UBQ.\n"
 	case "!compare":
