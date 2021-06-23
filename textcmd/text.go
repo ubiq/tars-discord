@@ -14,6 +14,7 @@ func Commands(command string) *string {
 		message += "`!hide / !hidechannels` - Tutorial on Hiding Discord Channels\n"
 		message += "`!invite` - Ubiq Discord Invite Link\n"
 		message += "`!price [TICKER]` - Price look ups\n"
+		message += "`!verify` - How to get Verified on Ubiq Discord\n"
 		message += "\n"
 		message += "__**Ubiq specific**__\n\n"
 		message += "`!backup` - Backup your account\n"
