@@ -1,9 +1,9 @@
 module github.com/ubiq/tars-discord
 
-go 1.15
+go 1.16
 
 require (
-	github.com/bwmarrin/discordgo v0.22.0
+	github.com/bwmarrin/discordgo v0.23.2
 	github.com/decred/dcrd/dcrutil/v3 v3.0.0
 	github.com/gorilla/websocket v1.4.1 // indirect
 	github.com/joho/godotenv v1.3.0
