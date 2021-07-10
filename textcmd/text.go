@@ -99,12 +99,16 @@ func Commands(command string) *string {
 		message = "`Ubiq in one page`: <https://blog.ubiqsmart.com/ubiq-in-one-page-df1672fb85dd>\n"
 	case "!pools":
 		message = "`List of known mining pools:`\n"
+		message += "<https://ubiqpool.io>"
+		message += "<https://ubiq.clona.ru>\n"
+		message += "<https://comining.io>"
+		message += "<https://ubq.crazypool.org>\n"
 		message += "<https://gomine.pro/pool/ubiq>\n"
+		message += "<https://ubiqpool.maxhash.org>\n"
 		message += "<https://ubq.mypool.online>\n"
-		message += "<https://comining.io> <https://ubiqpool.maxhash.org>\n"
-		message += "<https://ubiqpool.io>		<https://ubiq.clona.ru>\n"
-		message += "<https://ubq.solopool.org>     <https://ubiq.wattpool.net>\n"
 		message += "<https://ubiq.phoenixmax.org>\n"
+		message += "<https://ubq.solopool.org>"
+		message += "<https://ubiq.wattpool.net>\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
