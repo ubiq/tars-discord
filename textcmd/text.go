@@ -30,6 +30,7 @@ func Commands(command string) *string {
 		message += "`!miner` - Mining Software\n"
 		message += "`!mp / !monetarypolicy` - Monetary Policy\n"
 		message += "`!nucleus / !transparency` - Nucleus Transparency Report\n"
+		message += "`!odin` - Community maintained Documentation, Guides and Historical Data for Ubiq\n"
 		message += "`!onepage` - Ubiq in one page\n"
 		message += "`!pools` - Ubiq Pools List\n"
 		message += "`!resettabs / !blank` - Reset tabs in Fusion\n"
@@ -97,6 +98,8 @@ func Commands(command string) *string {
 		message = "`Nucleus Transparency Report:` <https://blog.ubiqsmart.com/nucleus-transparency-report-6496e444bd85>\n"
 	case "!onepage":
 		message = "`Ubiq in one page`: <https://blog.ubiqsmart.com/ubiq-in-one-page-df1672fb85dd>\n"
+	case "!odin":
+		message = "`Resources for using and buiding on Ubiq`: <https://odin.ubiqsmart.com>\n"
 	case "!pools":
 		message = "`List of known mining pools:`\n"
 		message += "<https://ubiqpool.io>\n"
