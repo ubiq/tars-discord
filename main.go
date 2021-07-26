@@ -617,8 +617,10 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		message = *ubqLambo()
 	// Text commands
 	// Keep this in alphabetical order. Where possible just use the singular term.
-	case "!ann", "!backup", "!blank", "!bots", "!caps", "!commands", "!compare", "!dojo", "!escher", "!escrow", "!ethunits", "!exchange", "!explorer", "!github", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nucleus", "!onepage", "!pools", "!quarterly", "!resettabs", "!roadmap", "!shinobi", "!site", "!social", "!solidity", "!stats", "!transparency", "!verified", "!verify", "!wallet", "!website", "!shokku", "!vyper":
-		message = *textcmd.Commands(command)
+	case "!ann", "!backup", "!blank", "!bots", "!bridge", "!caps", "!commands", "!compare", "!dojo", "!escher", "!escrow", "!ethunits", "!exchange", "!explorer", "!github", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nucleus", "!onepage", "!pools", "!quarterly", "!redshift", "!resettabs", "!roadmap", "!shinobi", "!site", "!social", "!solidity", "!stats", "!transparency", "!wallet", "!website", "!vyper":
+		s.ChannelMessageDelete(m.ChannelID, m.ID)
+
+		message = fmt.Sprintf("%sRequested by: %s", *textcmd.Commands(command), m.Author.Mention())
 	case "!join":
 		usageStr := "**Usage:** !join [OPTIONAL_CHANNEL]\n\n"
 		usageStr += fmt.Sprintf("**Optional Channels:** %s", keysString(optionalChannels))
