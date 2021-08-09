@@ -79,7 +79,7 @@ func Commands(command string) *string {
 		message += "`Catalx:` <https://catalx.io/trade/BTC-UBQ>\n"
 		message += "`Asymetrex:` <https://asymetrex.com/markets/ubqbtc>\n"
 	case "!explorer":
-		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <https://ubiqexplorer.com>\n"
+		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <https://ubiqexplorer.com> `Explorer 3:` <https://ubqblockexplorer.com>\n"
 	case "!github":
 		message = "`GitHub:` <https://github.com/ubiq>\n"
 	case "!hide", "!hidechannels":
