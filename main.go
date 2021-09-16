@@ -128,12 +128,15 @@ func ubqEUR(amount *float64) *string {
 	upperTicker := "UBQ"
 	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
+	if err != nil {
+		log.Println(err)
+		return &fiatErrMessage
+	}
 
 	// BTC lookup
 	bitstamp := bitstamp.New()
 	btcTickerName := "btceur"
 	btcTicker, err := bitstamp.GetTicker(btcTickerName)
-
 	if err != nil {
 		log.Println(err)
 		return &fiatErrMessage
@@ -159,12 +162,16 @@ func ubqUSD(amount *float64) *string {
 	upperTicker := "UBQ"
 	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
+	if err != nil {
+		log.Println(err)
+		message = "Error retrieving price from remote API's"
+		return &message
+	}
 
 	// BTC lookup
 	gemini := gemini.New(geminiAPIKey, geminiAPISecret)
 	btcTickerName := "btcusd"
 	btcTicker, err := gemini.GetTicker(btcTickerName)
-
 	if err != nil {
 		log.Println(err)
 		message = "Error retrieving price from remote API's"
@@ -190,12 +197,16 @@ func ubqLambo() *string {
 	upperTicker := "UBQ"
 	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
+	if err != nil {
+		log.Println(err)
+		message = "Error retrieving price from remote API's"
+		return &message
+	}
 
 	// BTC lookup
 	gemini := gemini.New(geminiAPIKey, geminiAPISecret)
 	btcTickerName := "btcusd"
 	btcTicker, err := gemini.GetTicker(btcTickerName)
-
 	if err != nil {
 		log.Println(err)
 		message = "Error retrieving price from remote API's"
@@ -685,7 +696,7 @@ func main() {
 			}
 		}
 
-		log.Fatalln("Failed to create config directory")
+		log.Fatalf("Failed to create config directory: %s", err)
 	}
 
 	// Optionally open database read only
@@ -718,7 +729,7 @@ func main() {
 	// Wait here until CTRL-C or other term signal is received.
 	log.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 
 	// Cleanly close down the Discord session.
@@ -766,6 +777,12 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	// Check and Terminate
 	if terminatorMemberFlag {
 		go terminateMember(s, m.GuildID, m.User.ID, "Flood join")
+		return
+	}
+
+	faqUsernameMatched, _ := regexp.MatchString(`FAQ`, m.User.Username)
+	if faqUsernameMatched && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.User.ID, "FAQ username spam")
 		return
 	}
 
