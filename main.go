@@ -495,18 +495,10 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 	vals := &m.Content
 	asciiMatched := isASCII(*vals)
 	httpMatched, _ := regexp.MatchString(`http`, *vals)
-	if !asciiMatched && httpMatched && len(m.Member.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.Author.ID, "Generic spam")
-		return nil
-	}
 	uniSpamMatched, _ := regexp.MatchString(`[uU]n[iⅰ].*a[iⅰ]r[dԁ]rop`, *vals)
-	if uniSpamMatched && len(m.Member.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.Author.ID, "Uniswap spam")
-		return nil
-	}
 	axieInfinitySpamMatched, _ := regexp.MatchString(`[aA]x[iⅰ]e.*[iI]nf[iⅰ]n[iⅰ]ty`, *vals)
-	if axieInfinitySpamMatched && len(m.Member.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.Author.ID, "Axie Infinity spam")
+	if ((!asciiMatched && httpMatched) || uniSpamMatched || axieInfinitySpamMatched) && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.Author.ID, "Link spam")
 		return nil
 	}
 	valSplit := strings.Split(*vals, " ")
@@ -780,9 +772,12 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 		return
 	}
 
-	faqUsernameMatched, _ := regexp.MatchString(`FAQ`, m.User.Username)
-	if faqUsernameMatched && len(m.Member.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.User.ID, "FAQ username spam")
+	faqUsernameMatched, _ := regexp.MatchString(`(?i)FAQ`, m.User.Username)
+	helpdeskUsernameMatched, _ := regexp.MatchString(`(?i)Helpdesk`, m.User.Username)
+	supportUsernameMatched, _ := regexp.MatchString(`(?i)Support`, m.User.Username)
+	adminUsernameMatched, _ := regexp.MatchString(`(?i)Admin`, m.User.Username)
+	if (faqUsernameMatched || helpdeskUsernameMatched || supportUsernameMatched || adminUsernameMatched) && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.User.ID, "Username spam")
 		return
 	}
 
