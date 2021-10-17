@@ -75,7 +75,6 @@ func Commands(command string) *string {
 		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ>\n"
 		message += "`QuickSwap:` <https://info.quickswap.exchange/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949>\n"
 		message += "`Dove Wallet:` <https://dovewallet.com/en/trade/spot/ubq-usdt>\n"
-		message += "`BitZ:` <https://www.bitz.cm/en/exchange/ubq_usdt>\n"
 		message += "`Catalx:` <https://catalx.io/trade/BTC-UBQ>\n"
 		message += "`Asymetrex:` <https://asymetrex.com/markets/ubqbtc>\n"
 	case "!explorer":
