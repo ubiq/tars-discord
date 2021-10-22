@@ -54,7 +54,7 @@ func Commands(command string) *string {
 		message += "`Polygon WUBQ Contract:` <https://polygonscan.com/token/0xb1c5c9b97b35592777091cd34ffff141ae866abd>\n"
 		message += "`Quickswap WETH-WUBQ Pair:` <https://info.quickswap.exchange/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949>\n"
 	case "!caps":
-		message = "The correct spelling for Ubiq is 'Ubiq', not all capitals (UBIQ is incorrect). This is similar to Nike where the logo is in all capitals but not the name. The ticker symbol for Ubiq is UBQ.\n"
+		message = "The correct spelling for Ubiq is 'Ubiq', not all capitals (UBIQ is incorrect). This is similar to Nike where the logo is in all capitals but not the name. The currency name and ticker symbol for Ubiq are both 'UBQ'.\n"
 	case "!compare":
 		message = "`Comparison chart provided by user moreexplosions:` https://imgur.com/a/Kr8RW"
 	case "!dojo":
