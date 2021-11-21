@@ -29,6 +29,7 @@ func Commands(command string) *string {
 		message += "`!hide` - How to Hide Channels\n"
 		message += "`!miner` - Mining Software\n"
 		message += "`!mp / !monetarypolicy` - Monetary Policy\n"
+		message += "`!nft / !nfts` - NFT's on Ubiq\n"
 		message += "`!nucleus / !transparency` - Nucleus Transparency Report\n"
 		message += "`!odin` - Community maintained Documentation, Guides and Historical Data for Ubiq\n"
 		message += "`!onepage` - Ubiq in one page\n"
@@ -93,6 +94,12 @@ func Commands(command string) *string {
 		message += "`SRBMiner (0.65% dev fee):` <https://www.srbminer.com>\n"
 	case "!mp", "!monetarypolicy":
 		message = "`Monetary policy and mining block rewards scheme in Ubiq:` <https://blog.ubiqsmart.com/ubiq-research-monetary-policy-2e27458983ec>\n"
+	case "!nft", "!nfts":
+		message = "`Token.Gallery:` <https://token.gallery>\n"
+		message += "`CHIMP:` <https://chimp.ubiqsmart.com>\n"
+		message += "`GB89:` <https://ubiq.github.io/gb89>\n"
+		message += "`nCeption:` <https://nception.ubiqsmart.com>\n"
+		message += "`Poster Shop:` <https://poster.ubiqsmart.com>\n"
 	case "!nucleus", "!transparency":
 		message = "`Nucleus Transparency Report:` <https://blog.ubiqsmart.com/nucleus-transparency-report-6496e444bd85>\n"
 	case "!onepage":
