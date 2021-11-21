@@ -54,7 +54,7 @@ func Commands(command string) *string {
 		message += "`Polygon WUBQ Contract:` <https://polygonscan.com/token/0xb1c5c9b97b35592777091cd34ffff141ae866abd>\n"
 		message += "`Quickswap WETH-WUBQ Pair:` <https://info.quickswap.exchange/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949>\n"
 	case "!caps":
-		message = "The correct spelling for Ubiq is 'Ubiq', not all capitals (UBIQ is incorrect). This is similar to Nike where the logo is in all capitals but not the name. The ticker symbol for Ubiq is UBQ.\n"
+		message = "The correct spelling for Ubiq is 'Ubiq', not all capitals (UBIQ is incorrect). This is similar to Nike where the logo is in all capitals but not the name. The currency name and ticker symbol for Ubiq are both 'UBQ'.\n"
 	case "!compare":
 		message = "`Comparison chart provided by user moreexplosions:` https://imgur.com/a/Kr8RW"
 	case "!dojo":
@@ -75,11 +75,10 @@ func Commands(command string) *string {
 		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ>\n"
 		message += "`QuickSwap:` <https://info.quickswap.exchange/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949>\n"
 		message += "`Dove Wallet:` <https://dovewallet.com/en/trade/spot/ubq-usdt>\n"
-		message += "`BitZ:` <https://www.bitz.cm/en/exchange/ubq_usdt>\n"
 		message += "`Catalx:` <https://catalx.io/trade/BTC-UBQ>\n"
 		message += "`Asymetrex:` <https://asymetrex.com/markets/ubqbtc>\n"
 	case "!explorer":
-		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <https://ubiqexplorer.com>\n"
+		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <https://ubiqexplorer.com> `Explorer 3:` <https://ubqblockexplorer.com>\n"
 	case "!github":
 		message = "`GitHub:` <https://github.com/ubiq>\n"
 	case "!hide", "!hidechannels":

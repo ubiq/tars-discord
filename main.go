@@ -128,12 +128,15 @@ func ubqEUR(amount *float64) *string {
 	upperTicker := "UBQ"
 	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
+	if err != nil {
+		log.Println(err)
+		return &fiatErrMessage
+	}
 
 	// BTC lookup
 	bitstamp := bitstamp.New()
 	btcTickerName := "btceur"
 	btcTicker, err := bitstamp.GetTicker(btcTickerName)
-
 	if err != nil {
 		log.Println(err)
 		return &fiatErrMessage
@@ -159,12 +162,16 @@ func ubqUSD(amount *float64) *string {
 	upperTicker := "UBQ"
 	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
+	if err != nil {
+		log.Println(err)
+		message = "Error retrieving price from remote API's"
+		return &message
+	}
 
 	// BTC lookup
 	gemini := gemini.New(geminiAPIKey, geminiAPISecret)
 	btcTickerName := "btcusd"
 	btcTicker, err := gemini.GetTicker(btcTickerName)
-
 	if err != nil {
 		log.Println(err)
 		message = "Error retrieving price from remote API's"
@@ -190,12 +197,16 @@ func ubqLambo() *string {
 	upperTicker := "UBQ"
 	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
+	if err != nil {
+		log.Println(err)
+		message = "Error retrieving price from remote API's"
+		return &message
+	}
 
 	// BTC lookup
 	gemini := gemini.New(geminiAPIKey, geminiAPISecret)
 	btcTickerName := "btcusd"
 	btcTicker, err := gemini.GetTicker(btcTickerName)
-
 	if err != nil {
 		log.Println(err)
 		message = "Error retrieving price from remote API's"
@@ -484,18 +495,10 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 	vals := &m.Content
 	asciiMatched := isASCII(*vals)
 	httpMatched, _ := regexp.MatchString(`http`, *vals)
-	if !asciiMatched && httpMatched && len(m.Member.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.Author.ID, "Generic spam")
-		return nil
-	}
 	uniSpamMatched, _ := regexp.MatchString(`[uU]n[iⅰ].*a[iⅰ]r[dԁ]rop`, *vals)
-	if uniSpamMatched && len(m.Member.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.Author.ID, "Uniswap spam")
-		return nil
-	}
 	axieInfinitySpamMatched, _ := regexp.MatchString(`[aA]x[iⅰ]e.*[iI]nf[iⅰ]n[iⅰ]ty`, *vals)
-	if axieInfinitySpamMatched && len(m.Member.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.Author.ID, "Axie Infinity spam")
+	if ((!asciiMatched && httpMatched) || uniSpamMatched || axieInfinitySpamMatched) && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.Author.ID, "Link spam")
 		return nil
 	}
 	valSplit := strings.Split(*vals, " ")
@@ -617,7 +620,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		message = *ubqLambo()
 	// Text commands
 	// Keep this in alphabetical order. Where possible just use the singular term.
-	case "!ann", "!backup", "!blank", "!bots", "!bridge", "!caps", "!commands", "!compare", "!dojo", "!escher", "!escrow", "!ethunits", "!exchange", "!explorer", "!github", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nucleus", "!onepage", "!pools", "!quarterly", "!redshift", "!resettabs", "!roadmap", "!shinobi", "!site", "!social", "!solidity", "!stats", "!transparency", "!wallet", "!website", "!vyper":
+	case "!ann", "!backup", "!blank", "!bots", "!bridge", "!caps", "!commands", "!compare", "!dojo", "!escher", "!escrow", "!ethunits", "!exchange", "!explorer", "!github", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nucleus", "!odin", "!onepage", "!pools", "!quarterly", "!redshift", "!resettabs", "!roadmap", "!shinobi", "!site", "!social", "!solidity", "!stats", "!transparency", "!wallet", "!website", "!vyper":
 		s.ChannelMessageDelete(m.ChannelID, m.ID)
 
 		message = fmt.Sprintf("%sRequested by: %s", *textcmd.Commands(command), m.Author.Mention())
@@ -685,7 +688,7 @@ func main() {
 			}
 		}
 
-		log.Fatalln("Failed to create config directory")
+		log.Fatalf("Failed to create config directory: %s", err)
 	}
 
 	// Optionally open database read only
@@ -718,7 +721,7 @@ func main() {
 	// Wait here until CTRL-C or other term signal is received.
 	log.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-sc
 
 	// Cleanly close down the Discord session.
@@ -766,6 +769,15 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	// Check and Terminate
 	if terminatorMemberFlag {
 		go terminateMember(s, m.GuildID, m.User.ID, "Flood join")
+		return
+	}
+
+	faqUsernameMatched, _ := regexp.MatchString(`(?i)FAQ`, m.User.Username)
+	helpdeskUsernameMatched, _ := regexp.MatchString(`(?i)Helpdesk`, m.User.Username)
+	supportUsernameMatched, _ := regexp.MatchString(`(?i)Support`, m.User.Username)
+	adminUsernameMatched, _ := regexp.MatchString(`(?i)Admin`, m.User.Username)
+	if (faqUsernameMatched || helpdeskUsernameMatched || supportUsernameMatched || adminUsernameMatched) && len(m.Member.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.User.ID, "Username spam")
 		return
 	}
 
