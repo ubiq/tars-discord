@@ -13,7 +13,6 @@ func Commands(command string) *string {
 		message += "`!escrow` - Escrow caution message\n"
 		message += "`!hide / !hidechannels` - Tutorial on Hiding Discord Channels\n"
 		message += "`!invite` - Ubiq Discord Invite Link\n"
-		message += "`!price [TICKER]` - Price look ups\n"
 		message += "\n"
 		message += "__**Ubiq specific**__\n\n"
 		message += "`!backup` - Backup your account\n"
@@ -39,8 +38,6 @@ func Commands(command string) *string {
 		message += "`!shinobi` - Access link and Info page for Shinobi\n"
 		message += "`!social` - Ubiq social media links\n"
 		message += "`!stats` - Ubiq network stats\n"
-		message += "`!ubqeur [AMOUNT]` - EUR conversion\n"
-		message += "`!ubqusd [AMOUNT]` - USD conversion\n"
 		message += "`!website / !site` - Ubiq Website\n"
 		message += "\n"
 		message += "__**Programming**__\n\n"
@@ -93,7 +90,7 @@ func Commands(command string) *string {
 		message += "`Nanominer (1% dev fee):` <https://nanominer.org/>\n"
 		message += "`SRBMiner (0.65% dev fee):` <https://www.srbminer.com>\n"
 	case "!mp", "!monetarypolicy":
-		message = "`Monetary policy and mining block rewards scheme in Ubiq:` <https://blog.ubiqsmart.com/ubiq-research-monetary-policy-2e27458983ec>\n"
+		message = "`Monetary policy and mining block rewards scheme in Ubiq:` <https://ubiqsmart.com/en/monetary-policy>\n"
 	case "!nft", "!nfts":
 		message = "`Token.Gallery:` <https://token.gallery>\n"
 		message += "`CHIMP:` <https://chimp.ubiqsmart.com>\n"
