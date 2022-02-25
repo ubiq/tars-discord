@@ -76,13 +76,13 @@ func Commands(command string) *string {
 		message += "`Catalx:` <https://catalx.io/trade/BTC-UBQ>\n"
 		message += "`Asymetrex:` <https://asymetrex.com/markets/ubqbtc>\n"
 	case "!explorer":
-		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <https://ubiqexplorer.com> `Explorer 3:` <https://ubqblockexplorer.com>\n"
+		message = "`Explorer:` <https://ubiqscan.io> `Explorer 2:` <https://ubqblockexplorer.com>\n"
 	case "!github":
 		message = "`GitHub:` <https://github.com/ubiq>\n"
 	case "!hide", "!hidechannels":
 		message = "<https://support.discordapp.com/hc/en-us/articles/213599277-How-do-I-hide-channels->\n"
 	case "!invite":
-		message = "`Ubiq Discord invite link:` <https://discord.gg/XaqzJB4>\n"
+		message = "`Ubiq Discord invite link:` <https://discord.com/invite/ubiq>\n"
 	case "!miner":
 		message = "`Ubqminer (0% dev fee):` <https://github.com/ubiq/ubqminer/releases>\n"
 		message += "`PhoenixMiner (0.65% dev fee):` <https://bitcointalk.org/index.php?topic=2647654.0>\n"
@@ -105,16 +105,7 @@ func Commands(command string) *string {
 		message = "`Resources for using and buiding on Ubiq`: <https://odin.ubiqsmart.com>\n"
 	case "!pools":
 		message = "`List of known mining pools:`\n"
-		message += "<https://ubiqpool.io>\n"
-		message += "<https://ubiq.clona.ru>\n"
-		message += "<https://comining.io>\n"
-		message += "<https://ubq.crazypool.org>\n"
-		message += "<https://gomine.pro/pool/ubiq>\n"
-		message += "<https://ubiqpool.maxhash.org>\n"
-		message += "<https://ubq.mypool.online>\n"
-		message += "<https://ubiq.phoenixmax.org>\n"
-		message += "<https://ubq.solopool.org>\n"
-		message += "<https://ubiq.wattpool.net>\n"
+		message += "<https://miningpoolstats.stream/ubiq>\n"
 	case "!resettabs", "!blank":
 		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
@@ -123,15 +114,15 @@ func Commands(command string) *string {
 		message = "`You can access Shinobi by visiting:` <https://shinobi.ubiq.ninja>\n"
 		message += "`Information can be found at:` <https://info.ubiq.ninja>\n"
 	case "!social":
-		message = "Follow us on social media `Medium:` <https://blog.ubiqsmart.com> `Twitter:` <https://twitter.com/ubiqsmart> `YouTube:` <https://www.youtube.com/ubiqvideos> `Reddit:` <https://www.reddit.com/r/Ubiq/> `GitHub:` <https://github.com/ubiq> `BitcoinTalk:` <https://bitcointalk.org/index.php?topic=1763606.0> `Telegram:` <https://t.me/Ubiqsmart> `Wikipedia:` <https://en.wikipedia.org/wiki/Ubiq>\n"
+		message = "Follow us on social media `Medium:` <https://blog.ubiqsmart.com> `Twitter:` <https://twitter.com/ubiqsmart> `YouTube:` <https://www.youtube.com/ubiqvideos> `Reddit:` <https://www.reddit.com/r/Ubiq/> `GitHub:` <https://github.com/ubiq> `BitcoinTalk:` <https://bitcointalk.org/index.php?topic=1763606.0> `Telegram:` <https://t.me/Ubiqsmart>\n"
 	case "!solidity":
 		message = "`Solidity documentation:` <http://solidity.readthedocs.io>\n"
 	case "!stats":
 		message = "`Ubiq network stats:` <https://stats.ubiqscan.io>\n"
 	case "!wallet":
-		message = "`Web:` <https://pyrus.ubiqsmart.com> `Web2:` <https://myetherwallet.com> `GUI:` <https://github.com/ubiq/fusion/releases> `CLI:` <https://github.com/ubiq/go-ubiq/releases>\n"
+		message = "`Web:` <https://pyrus.ubiqsmart.com> `Web2:` <https://mycrypto.com> `Browser plugin:` <https://ubiqsmart.com/sparrow> `CLI:` <https://github.com/ubiq/go-ubiq/releases>\n"
 	case "!website", "!site":
-		message = "`Ubiq website:` <http://ubiqsmart.com/>	`Ubiq Community website:` <https://www.ubiqescher.com/>\n"
+		message = "`Ubiq website:` <http://ubiqsmart.com/>\n"
 	case "!vyper":
 		message = "`Vyper documentation:` <http://vyper.readthedocs.io>\n"
 	}
