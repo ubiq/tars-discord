@@ -89,6 +89,7 @@ func Commands(command string) *string {
 		message += "`TT-Miner (1% dev fee):` <https://bitcointalk.org/index.php?topic=5025783.0>\n"
 		message += "`Nanominer (1% dev fee):` <https://nanominer.org/>\n"
 		message += "`SRBMiner (0.65% dev fee):` <https://www.srbminer.com>\n"
+		message += "`lolMiner (0.7% dev fee):` <https://github.com/Lolliedieb/lolMiner-releases/releases>\n"
 	case "!mp", "!monetarypolicy":
 		message = "`Monetary policy and mining block rewards scheme in Ubiq:` <https://ubiqsmart.com/en/monetary-policy>\n"
 	case "!nft", "!nfts":
