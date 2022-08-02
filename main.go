@@ -16,7 +16,7 @@ import (
 	"unicode"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/decred/dcrd/dcrutil/v3"
+	"github.com/decred/dcrd/dcrutil/v4"
 	"github.com/joho/godotenv"
 	"github.com/jpatel888/go-bitstamp"
 	"github.com/jyap808/go-gemini"
@@ -101,20 +101,21 @@ func trexPrice(vals *string) *string {
 
 	rawticker := vals
 	upperTicker := strings.ToUpper(*rawticker)
-	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
+	tickerName := fmt.Sprintf("%s-BTC", upperTicker)
 
 	marketSummary, err := bittrex.GetMarketSummary(tickerName)
-
 	if err != nil {
-		message = "Error: Trex invalid market"
-	} else {
-		y1 := marketSummary[0].PrevDay
-		y2 := marketSummary[0].Last
-		decimal100 := decimal.NewFromFloat(100.0)
-		change := y2.Sub(y1).Div(y1).Mul(decimal100)
-		message = fmt.Sprintf("Bittrex  - BID: %s ASK: %s LAST: %s HIGH: %s LOW: %s VOLUME: %s %s, %s BTC CHANGE: %s%%",
-			marketSummary[0].Bid.StringFixed(8), marketSummary[0].Ask.StringFixed(8), marketSummary[0].Last.StringFixed(8), marketSummary[0].High.StringFixed(8), marketSummary[0].Low.StringFixed(8), marketSummary[0].Volume.StringFixed(2), upperTicker, marketSummary[0].BaseVolume.StringFixed(4), change.StringFixed(2))
+		message = "Error retrieving price from remote API's"
+		return &message
 	}
+	ticker, err := bittrex.GetTicker(tickerName)
+	if err != nil {
+		message = "Error retrieving price from remote API's"
+		return &message
+	}
+
+	message = fmt.Sprintf("Bittrex  - BID: %.8f ASK: %.8f LAST: %.8f HIGH: %.8f LOW: %.8f VOLUME: %.2f %s, %.4f BTC CHANGE: %.2f%%",
+		ticker[0].BidRate.InexactFloat64(), ticker[0].AskRate.InexactFloat64(), ticker[0].LastTradeRate.InexactFloat64(), marketSummary.High.InexactFloat64(), marketSummary.Low.InexactFloat64(), marketSummary.Volume.InexactFloat64(), upperTicker, marketSummary.QuoteVolume.InexactFloat64(), marketSummary.PercentChange.InexactFloat64())
 
 	return &message
 }
@@ -126,7 +127,7 @@ func ubqEUR(amount *float64) *string {
 	// Bittrex lookup
 	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
 	upperTicker := "UBQ"
-	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
+	tickerName := fmt.Sprintf("%s-BTC", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
 	if err != nil {
 		log.Println(err)
@@ -149,7 +150,7 @@ func ubqEUR(amount *float64) *string {
 	}
 	decimalAmount := decimal.NewFromFloat(*amount)
 	decimalBTCPrice := decimal.NewFromFloat(btcPrice)
-	eurValue := ticker.Ask.Mul(decimalAmount).Mul(decimalBTCPrice)
+	eurValue := ticker[0].AskRate.Mul(decimalAmount).Mul(decimalBTCPrice)
 	message = fmt.Sprintf("```%.1f UBQ = €%s EUR```", *amount, eurValue.StringFixed(3))
 	return &message
 }
@@ -160,7 +161,7 @@ func ubqUSD(amount *float64) *string {
 	// Bittrex lookup
 	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
 	upperTicker := "UBQ"
-	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
+	tickerName := fmt.Sprintf("%s-BTC", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
 	if err != nil {
 		log.Println(err)
@@ -182,7 +183,7 @@ func ubqUSD(amount *float64) *string {
 
 	decimalAmount := decimal.NewFromFloat(*amount)
 	decimalBTCPrice := decimal.NewFromFloat(btcPrice)
-	usdValue := ticker.Ask.Mul(decimalAmount).Mul(decimalBTCPrice)
+	usdValue := ticker[0].AskRate.Mul(decimalAmount).Mul(decimalBTCPrice)
 
 	message = fmt.Sprintf("```%.1f UBQ = $%s USD```", *amount, usdValue.StringFixed(3))
 
@@ -195,7 +196,7 @@ func ubqLambo() *string {
 	// Bittrex lookup
 	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
 	upperTicker := "UBQ"
-	tickerName := fmt.Sprintf("BTC-%s", upperTicker)
+	tickerName := fmt.Sprintf("%s-BTC", upperTicker)
 	ticker, err := bittrex.GetTicker(tickerName)
 	if err != nil {
 		log.Println(err)
@@ -217,7 +218,7 @@ func ubqLambo() *string {
 
 	decimalAmount := decimal.NewFromFloat(1.0)
 	decimalBTCPrice := decimal.NewFromFloat(btcPrice)
-	usdValue := ticker.Ask.Mul(decimalAmount).Mul(decimalBTCPrice)
+	usdValue := ticker[0].AskRate.Mul(decimalAmount).Mul(decimalBTCPrice)
 
 	lamboValue := decimal.NewFromFloat(300000.0).Div(usdValue)
 
@@ -226,14 +227,22 @@ func ubqLambo() *string {
 	return &message
 }
 
+// Initial Bittrex table with data
 func initializeBittrex(db *bolt.DB) (err error) {
-	// Initial Bittrex table with data
-
 	log.Println("initializeBittrex: START")
 	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
 	markets, err := bittrex.GetMarkets()
 	if err != nil {
 		return err
+	}
+	currencies, err := bittrex.GetCurrencies()
+	if err != nil {
+		return err
+	}
+
+	symbolName := map[string]string{}
+	for _, currency := range currencies {
+		symbolName[currency.Symbol] = currency.Name
 	}
 
 	bucketname := []byte("bittrex")
@@ -253,10 +262,11 @@ func initializeBittrex(db *bolt.DB) (err error) {
 		}
 
 		for _, market := range markets {
-			log.Println("initializeBittrex: ADD", market.MarketName)
-
-			key := []byte(market.MarketCurrency)
-			value := []byte(market.MarketCurrencyLong)
+			if market.QuoteCurrencySymbol != "BTC" {
+				continue
+			}
+			key := []byte(market.BaseCurrencySymbol)
+			value := []byte(symbolName[market.BaseCurrencySymbol])
 			err = bucket.Put(key, value)
 			if err != nil {
 				return err
@@ -279,9 +289,8 @@ func initializeBittrex(db *bolt.DB) (err error) {
 	return nil
 }
 
+// Initialize Poloniex table with data
 func initializePoloniex(db *bolt.DB) (err error) {
-	// Initialize Poloniex table with data
-
 	log.Println("initializePoloniex: START")
 	poloniex := poloniex.New(poloniexAPIKey, poloniexAPISecret)
 	currencies, err := poloniex.GetCurrencies()
