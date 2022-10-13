@@ -782,7 +782,14 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	helpdeskUsernameMatched, _ := regexp.MatchString(`(?i)Helpdesk`, m.User.Username)
 	supportUsernameMatched, _ := regexp.MatchString(`(?i)Support`, m.User.Username)
 	adminUsernameMatched, _ := regexp.MatchString(`(?i)Admin`, m.User.Username)
-	if (faqUsernameMatched || helpdeskUsernameMatched || supportUsernameMatched || adminUsernameMatched) && len(m.Member.Roles) == 0 {
+	captchaUsernameMatched, _ := regexp.MatchString(`(?i)Captcha`, m.User.Username)
+	giveawayUsernameMatched, _ := regexp.MatchString(`(?i)Giveaway`, m.User.Username)
+	mee6UsernameMatched, _ := regexp.MatchString(`(?i)MEE6`, m.User.Username)
+	managerUsernameMatched, _ := regexp.MatchString(`(?i)Manager`, m.User.Username)
+	if (faqUsernameMatched || helpdeskUsernameMatched || supportUsernameMatched ||
+		adminUsernameMatched || captchaUsernameMatched || giveawayUsernameMatched ||
+		mee6UsernameMatched || managerUsernameMatched) &&
+		len(m.Member.Roles) == 0 {
 		go terminateMember(s, m.GuildID, m.User.ID, "Username spam")
 		return
 	}
