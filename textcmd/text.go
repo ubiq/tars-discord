@@ -50,7 +50,7 @@ func Commands(command string) *string {
 	case "!bridge", "!redshift":
 		message = "`Wrapped Ubiq (WUBQ) Contract:` <https://ubiqscan.io/address/0x1fa6a37c64804c0d797ba6bc1955e50068fbf362>\n"
 		message += "`Polygon WUBQ Contract:` <https://polygonscan.com/token/0xb1c5c9b97b35592777091cd34ffff141ae866abd>\n"
-		message += "`Quickswap WETH-WUBQ Pair:` <https://info.quickswap.exchange/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949>\n"
+		message += "`Quickswap WETH-WUBQ Pair:` <https://info.quickswap.exchange/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949#/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949>\n"
 	case "!caps":
 		message = "The correct spelling for Ubiq is 'Ubiq', not all capitals (UBIQ is incorrect). This is similar to Nike where the logo is in all capitals but not the name. The currency name and ticker symbol for Ubiq are both 'UBQ'.\n"
 	case "!compare":
@@ -71,8 +71,8 @@ func Commands(command string) *string {
 		message = "`Ethereum units:` <https://github.com/ryepdx/ethereum-units>\n"
 	case "!exchange", "!market":
 		message = "`Bittrex:` <https://bittrex.com/Market/Index?MarketName=BTC-UBQ>\n"
-		message += "`QuickSwap:` <https://info.quickswap.exchange/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949>\n"
-		message += "`Dove Wallet:` <https://dovewallet.com/en/trade/spot/ubq-usdt>\n"
+		message += "`QuickSwap:` <https://info.quickswap.exchange/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949#/pair/0x8dccc1251f93fc4eb71dc7a686b58d3e718a5949>\n"
+		message += "`BTX:` <https://btxpro.co.kr/en/trade/spot/ubq-btc>\n"
 		message += "`Catalx:` <https://catalx.io/trade/BTC-UBQ>\n"
 		message += "`Asymetrex:` <https://asymetrex.com/markets/ubqbtc>\n"
 	case "!explorer":
@@ -93,7 +93,8 @@ func Commands(command string) *string {
 	case "!mp", "!monetarypolicy":
 		message = "`Monetary policy and mining block rewards scheme in Ubiq:` <https://ubiqsmart.com/en/monetary-policy>\n"
 	case "!nft", "!nfts":
-		message = "`Token.Gallery:` <https://token.gallery>\n"
+		message = "`Jawa Camp:` <https://jawacamp.ubiqsmart.com>\n"
+		message += "`Token.Gallery:` <https://token.gallery>\n"
 		message += "`CHIMP:` <https://chimp.ubiqsmart.com>\n"
 		message += "`GB89:` <https://ubiq.github.io/gb89>\n"
 		message += "`nCeption:` <https://nception.ubiqsmart.com>\n"
