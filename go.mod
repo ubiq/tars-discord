@@ -1,9 +1,9 @@
 module github.com/ubiq/tars-discord
 
-go 1.18
+go 1.19
 
 require (
-	github.com/bwmarrin/discordgo v0.25.0
+	github.com/bwmarrin/discordgo v0.26.1
 	github.com/decred/dcrd/dcrutil/v4 v4.0.0
 	github.com/joho/godotenv v1.4.0
 	github.com/jpatel888/go-bitstamp v0.0.0-20180125153949-7d08dfbcc0bc
