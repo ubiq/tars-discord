@@ -33,7 +33,6 @@ func Commands(command string) *string {
 		message += "`!odin` - Community maintained Documentation, Guides and Historical Data for Ubiq\n"
 		message += "`!onepage` - Ubiq in one page\n"
 		message += "`!pools` - Ubiq Pools List\n"
-		message += "`!resettabs / !blank` - Reset tabs in Fusion\n"
 		message += "`!roadmap / !quarterly` - Roadmap and Quarterly report\n"
 		message += "`!shinobi` - Access link and Info page for Shinobi\n"
 		message += "`!social` - Ubiq social media links\n"
@@ -108,8 +107,6 @@ func Commands(command string) *string {
 	case "!pools":
 		message = "`List of known mining pools:`\n"
 		message += "<https://miningpoolstats.stream/ubiq>\n"
-	case "!resettabs", "!blank":
-		message = "In the Fusion URL bar, enter <https://wallet.ubiqsmart.io/?reset-tabs=true>\n"
 	case "!roadmap", "!quarterly":
 		message = "`Roadmap and quarterly report:` <https://blog.ubiqsmart.com/tagged/monthly> \n"
 	case "!shinobi":

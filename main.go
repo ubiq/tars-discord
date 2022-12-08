@@ -626,7 +626,7 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		message = *ubqLambo()
 	// Text commands
 	// Keep this in alphabetical order. Where possible just use the singular term.
-	case "!ann", "!backup", "!blank", "!bots", "!bridge", "!caps", "!commands", "!compare", "!dojo", "!escher", "!escrow", "!ethunits", "!exchange", "!explorer", "!github", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nft", "!nfts", "!nucleus", "!odin", "!onepage", "!pools", "!quarterly", "!redshift", "!resettabs", "!roadmap", "!shinobi", "!site", "!social", "!solidity", "!stats", "!transparency", "!wallet", "!website", "!vyper":
+	case "!ann", "!backup", "!bots", "!bridge", "!caps", "!commands", "!compare", "!dojo", "!escher", "!escrow", "!ethunits", "!exchange", "!explorer", "!github", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nft", "!nfts", "!nucleus", "!odin", "!onepage", "!pools", "!quarterly", "!redshift", "!roadmap", "!shinobi", "!site", "!social", "!solidity", "!stats", "!transparency", "!wallet", "!website", "!vyper":
 		s.ChannelMessageDelete(m.ChannelID, m.ID)
 
 		message = fmt.Sprintf("%sRequested by: %s", *textcmd.Commands(command), m.Author.Mention())
