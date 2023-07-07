@@ -769,6 +769,19 @@ func terminateMember(s *discordgo.Session, guildID string, userID string, reason
 	}
 }
 
+// Ported from https://github.com/hugonun/discordid2date/blob/master/main.js#L5
+func convertIDtoCreationTime(id string) time.Time {
+	idInt, _ := strconv.ParseInt(id, 10, 64)
+	bin := strconv.FormatInt(idInt, 2)
+	unixbin := ""
+	m := 64 - len(bin)
+	unixbin = bin[0 : 42-m]
+	unixInt, _ := strconv.ParseInt(unixbin, 2, 64)
+	unixCreationTime := unixInt + 1420070400000
+	creationTime := time.Unix(0, unixCreationTime*int64(time.Millisecond))
+	return creationTime
+}
+
 // This function is called on GuildMemberAdd event
 // Currently just performs Flood handling
 func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
