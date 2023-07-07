@@ -56,6 +56,7 @@ const (
 	terminatorTimerSeconds = 60
 
 	tradingChannelID = "348036278673211392"
+	turdID           = "1072302088232636436"
 )
 
 func checkTradingChannel(channelID string) *string {
@@ -805,6 +806,16 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 		len(m.Member.Roles) == 0 {
 		go terminateMember(s, m.GuildID, m.User.ID, "Username spam")
 		return
+	}
+
+	// Check new user Creation Time
+	memberCreationTime := convertIDtoCreationTime(m.User.ID)
+	t1 := time.Now()
+	diff := t1.Sub(memberCreationTime)
+	if diff.Hours() < 24*30 {
+		turdMessage := fmt.Sprintf("Smelly turd: <@%s>", m.User.ID)
+		s.GuildMemberRoleAdd(m.GuildID, m.User.ID, turdID)
+		s.ChannelMessageSend(floodAlertChannel, turdMessage)
 	}
 
 	if floodStack.Len() < floodMemberAddInterval {
