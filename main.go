@@ -18,29 +18,17 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/decred/dcrd/dcrutil/v4"
 	"github.com/joho/godotenv"
-	"github.com/jpatel888/go-bitstamp"
 	"github.com/jyap808/go-gemini"
-	"github.com/jyap808/go-poloniex"
-	"github.com/shopspring/decimal"
-	"github.com/toorop/go-bittrex"
 	"github.com/ubiq/tars-discord/optionalchannelscmd"
 	"github.com/ubiq/tars-discord/textcmd"
-	bolt "go.etcd.io/bbolt"
 )
 
 // Variables used for command line parameters
 var (
-	bittrexAPIKey     = ""
-	bittrexAPISecret  = ""
-	geminiAPIKey      = ""
-	geminiAPISecret   = ""
-	poloniexAPIKey    = ""
-	poloniexAPISecret = ""
-
-	db *bolt.DB
+	geminiAPIKey    = ""
+	geminiAPISecret = ""
 
 	appHomeDir        = dcrutil.AppDataDir("ubq-tars-discord", false)
-	defaultBoldDBFile = filepath.Join(appHomeDir, "exchange_pairs.db")
 	defaultConfigFile = filepath.Join(appHomeDir, "secrets.env")
 
 	// Flood
@@ -52,11 +40,12 @@ const (
 	floodMemberAddInterval = 3
 	floodMilliseconds      = 60000 // 60 seconds
 	floodAlertChannel      = "504427120236167207"
-	moderatorID            = "348038402148532227"
+	moderatorRoleID        = "348038402148532227"
 	terminatorTimerSeconds = 60
 
 	tradingChannelID = "348036278673211392"
-	turdID           = "1072302088232636436"
+	turdRoleID       = "1072302088232636436"
+	verifiedRoleID   = "350127755079319552"
 )
 
 func checkTradingChannel(channelID string) *string {
@@ -65,299 +54,6 @@ func checkTradingChannel(channelID string) *string {
 	if channelID != tradingChannelID {
 		message = fmt.Sprintf("This price related command is only allowed in the <#%s> channel", tradingChannelID)
 	}
-
-	return &message
-}
-
-func poloPrice(vals *string) *string {
-	message := ""
-
-	poloniex := poloniex.New(poloniexAPIKey, poloniexAPISecret)
-
-	rawticker := *vals
-	upperTicker := strings.ToUpper(rawticker)
-	tickerName := fmt.Sprintf("BTC_%s", upperTicker)
-
-	tickers, err := poloniex.GetTickers()
-	if err != nil {
-		message = "Error: API not available"
-		return &message
-	}
-
-	ticker, ok := tickers[tickerName]
-	if ok {
-		message = fmt.Sprintf("Poloniex - BID: %.8f ASK: %.8f LAST: %.8f HIGH: %.8f LOW: %.8f VOLUME: %.2f %s, %.4f BTC CHANGE: %.2f%%",
-			ticker.HighestBid, ticker.LowestAsk, ticker.Last, ticker.High24Hr, ticker.Low24Hr, ticker.QuoteVolume, upperTicker, ticker.BaseVolume, (ticker.PercentChange * 100))
-	} else {
-		message = "Error: Polo Invalid market"
-	}
-
-	return &message
-}
-
-func trexPrice(vals *string) *string {
-	message := ""
-
-	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
-
-	rawticker := vals
-	upperTicker := strings.ToUpper(*rawticker)
-	tickerName := fmt.Sprintf("%s-BTC", upperTicker)
-
-	marketSummary, err := bittrex.GetMarketSummary(tickerName)
-	if err != nil {
-		message = "Error retrieving price from remote API's"
-		return &message
-	}
-	ticker, err := bittrex.GetTicker(tickerName)
-	if err != nil {
-		message = "Error retrieving price from remote API's"
-		return &message
-	}
-
-	message = fmt.Sprintf("Bittrex  - BID: %.8f ASK: %.8f LAST: %.8f HIGH: %.8f LOW: %.8f VOLUME: %.2f %s, %.4f BTC CHANGE: %.2f%%",
-		ticker[0].BidRate.InexactFloat64(), ticker[0].AskRate.InexactFloat64(), ticker[0].LastTradeRate.InexactFloat64(), marketSummary.High.InexactFloat64(), marketSummary.Low.InexactFloat64(), marketSummary.Volume.InexactFloat64(), upperTicker, marketSummary.QuoteVolume.InexactFloat64(), marketSummary.PercentChange.InexactFloat64())
-
-	return &message
-}
-
-func ubqEUR(amount *float64) *string {
-	message := ""
-	fiatErrMessage := "Error retrieving fiat conversion from remote API's"
-
-	// Bittrex lookup
-	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
-	upperTicker := "UBQ"
-	tickerName := fmt.Sprintf("%s-BTC", upperTicker)
-	ticker, err := bittrex.GetTicker(tickerName)
-	if err != nil {
-		log.Println(err)
-		return &fiatErrMessage
-	}
-
-	// BTC lookup
-	bitstamp := bitstamp.New()
-	btcTickerName := "btceur"
-	btcTicker, err := bitstamp.GetTicker(btcTickerName)
-	if err != nil {
-		log.Println(err)
-		return &fiatErrMessage
-	}
-
-	btcPrice := btcTicker.Last
-
-	if btcPrice == 0 {
-		return &fiatErrMessage
-	}
-	decimalAmount := decimal.NewFromFloat(*amount)
-	decimalBTCPrice := decimal.NewFromFloat(btcPrice)
-	eurValue := ticker[0].AskRate.Mul(decimalAmount).Mul(decimalBTCPrice)
-	message = fmt.Sprintf("```%.1f UBQ = €%s EUR```", *amount, eurValue.StringFixed(3))
-	return &message
-}
-
-func ubqUSD(amount *float64) *string {
-	message := ""
-
-	// Bittrex lookup
-	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
-	upperTicker := "UBQ"
-	tickerName := fmt.Sprintf("%s-BTC", upperTicker)
-	ticker, err := bittrex.GetTicker(tickerName)
-	if err != nil {
-		log.Println(err)
-		message = "Error retrieving price from remote API's"
-		return &message
-	}
-
-	// BTC lookup
-	gemini := gemini.New(geminiAPIKey, geminiAPISecret)
-	btcTickerName := "btcusd"
-	btcTicker, err := gemini.GetTicker(btcTickerName)
-	if err != nil {
-		log.Println(err)
-		message = "Error retrieving price from remote API's"
-		return &message
-	}
-
-	btcPrice := btcTicker.Last
-
-	decimalAmount := decimal.NewFromFloat(*amount)
-	decimalBTCPrice := decimal.NewFromFloat(btcPrice)
-	usdValue := ticker[0].AskRate.Mul(decimalAmount).Mul(decimalBTCPrice)
-
-	message = fmt.Sprintf("```%.1f UBQ = $%s USD```", *amount, usdValue.StringFixed(3))
-
-	return &message
-}
-
-func ubqLambo() *string {
-	message := ""
-
-	// Bittrex lookup
-	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
-	upperTicker := "UBQ"
-	tickerName := fmt.Sprintf("%s-BTC", upperTicker)
-	ticker, err := bittrex.GetTicker(tickerName)
-	if err != nil {
-		log.Println(err)
-		message = "Error retrieving price from remote API's"
-		return &message
-	}
-
-	// BTC lookup
-	gemini := gemini.New(geminiAPIKey, geminiAPISecret)
-	btcTickerName := "btcusd"
-	btcTicker, err := gemini.GetTicker(btcTickerName)
-	if err != nil {
-		log.Println(err)
-		message = "Error retrieving price from remote API's"
-		return &message
-	}
-
-	btcPrice := btcTicker.Last
-
-	decimalAmount := decimal.NewFromFloat(1.0)
-	decimalBTCPrice := decimal.NewFromFloat(btcPrice)
-	usdValue := ticker[0].AskRate.Mul(decimalAmount).Mul(decimalBTCPrice)
-
-	lamboValue := decimal.NewFromFloat(300000.0).Div(usdValue)
-
-	message = fmt.Sprintf("```You would need about %s UBQ to buy a lambo.```", lamboValue.StringFixed(0))
-
-	return &message
-}
-
-// Initial Bittrex table with data
-func initializeBittrex(db *bolt.DB) (err error) {
-	log.Println("initializeBittrex: START")
-	bittrex := bittrex.New(bittrexAPIKey, bittrexAPISecret)
-	markets, err := bittrex.GetMarkets()
-	if err != nil {
-		return err
-	}
-	currencies, err := bittrex.GetCurrencies()
-	if err != nil {
-		return err
-	}
-
-	symbolName := map[string]string{}
-	for _, currency := range currencies {
-		symbolName[currency.Symbol] = currency.Name
-	}
-
-	bucketname := []byte("bittrex")
-
-	// store some data
-	err = db.Update(func(tx *bolt.Tx) error {
-		// Delete bucket
-		err := tx.DeleteBucket(bucketname)
-		if err != nil {
-			log.Println("No bucket deleted")
-		}
-
-		// Open bucket
-		bucket, err := tx.CreateBucket(bucketname)
-		if err != nil {
-			return err
-		}
-
-		for _, market := range markets {
-			if market.QuoteCurrencySymbol != "BTC" {
-				continue
-			}
-			key := []byte(market.BaseCurrencySymbol)
-			value := []byte(symbolName[market.BaseCurrencySymbol])
-			err = bucket.Put(key, value)
-			if err != nil {
-				return err
-			}
-		}
-
-		// Store the last updated time
-		err = bucket.Put([]byte("lastupdated"), []byte(fmt.Sprint(time.Now().Unix())))
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-	if err != nil {
-		log.Println(err)
-	}
-
-	log.Println("initializeBittrex: END")
-	return nil
-}
-
-// Initialize Poloniex table with data
-func initializePoloniex(db *bolt.DB) (err error) {
-	log.Println("initializePoloniex: START")
-	poloniex := poloniex.New(poloniexAPIKey, poloniexAPISecret)
-	currencies, err := poloniex.GetCurrencies()
-	if err != nil {
-		return err
-	}
-
-	bucketname := []byte("poloniex")
-
-	// store some data
-	err = db.Update(func(tx *bolt.Tx) error {
-		// Delete bucket
-		err := tx.DeleteBucket(bucketname)
-		if err != nil {
-			log.Println("No bucket deleted")
-		}
-
-		// Open bucket
-		bucket, err := tx.CreateBucket(bucketname)
-		if err != nil {
-			return err
-		}
-
-		for ticker, value := range currencies.Pair {
-			if value.Delisted == 1 {
-				continue
-			}
-			log.Println("initializePoloniex: ADD", ticker)
-			key := []byte(ticker)
-			value := []byte(value.Name)
-			err = bucket.Put(key, value)
-			if err != nil {
-				return err
-			}
-		}
-
-		// Store the last updated time
-		err = bucket.Put([]byte("lastupdated"), []byte(fmt.Sprint(time.Now().Unix())))
-		if err != nil {
-			return err
-		}
-
-		return nil
-	})
-	if err != nil {
-		log.Println(err)
-	}
-
-	log.Println("initializePoloniex: END")
-	return nil
-}
-
-func generatePriceMessage(prices []string, tickerHeader string) *string {
-	message := ""
-	beginString := "```"
-	endString := "```"
-	headerString := tickerHeader
-
-	if len(prices) == 0 {
-		message = "Ticker not found"
-		return &message
-	}
-
-	pricesString := strings.Join(prices, "\n")
-
-	message = fmt.Sprintf("%s%s\n%s%s", beginString, headerString, pricesString, endString)
 
 	return &message
 }
@@ -385,100 +81,6 @@ func btcPrice() *string {
 	} else {
 		message = fmt.Sprintf("```Gemini BTC price: %.2f```", lastPrice)
 	}
-
-	return &message
-}
-
-func otherPrice(ticker *string) *string {
-	message := ""
-
-	var prices []string
-	var tickerHeader string
-	var bittrexUpdate bool
-	var poloniexUpdate bool
-
-	// Check Bittrex - Last updated
-	db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("bittrex"))
-		if b == nil {
-			log.Println(".. you need to initialize the pairs database by running: price refresh")
-		}
-		updated := b.Get([]byte("lastupdated"))
-		if updated != nil {
-			ts, err := strconv.Atoi(string(updated))
-			if err != nil {
-				return err
-			}
-			t := time.Unix(int64(ts), 0)
-			if time.Since(t).Seconds() > 3600 {
-				bittrexUpdate = true
-			}
-		}
-		return nil
-	})
-
-	// Check Bittrex
-	db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("bittrex"))
-		if b == nil {
-			log.Println(".. you need to initialize the pairs database by running: price refresh")
-		}
-		v := b.Get([]byte(*ticker))
-		if v != nil {
-			bittrexUpdate = false
-			tickerHeader = fmt.Sprintf("%s - %s", *ticker, v)
-			price := trexPrice(ticker)
-			prices = append(prices, *price)
-		}
-		return nil
-	})
-
-	// Check Poloniex - Last updated
-	db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("poloniex"))
-		if b == nil {
-			log.Println(".. you need to initialize the pairs database by running: price refresh")
-		}
-		updated := b.Get([]byte("lastupdated"))
-		if updated != nil {
-			ts, err := strconv.Atoi(string(updated))
-			if err != nil {
-				return err
-			}
-			t := time.Unix(int64(ts), 0)
-			if time.Since(t).Seconds() > 3600 {
-				poloniexUpdate = true
-			}
-		}
-		return nil
-	})
-
-	// Check Poloniex
-	db.View(func(tx *bolt.Tx) error {
-		b := tx.Bucket([]byte("poloniex"))
-		if b == nil {
-			log.Println(".. you need to initialize the pairs database by running: price refresh")
-		}
-		v := b.Get([]byte(*ticker))
-		if v != nil {
-			poloniexUpdate = false
-			if tickerHeader == "" {
-				tickerHeader = fmt.Sprintf("%s - %s", *ticker, v)
-			}
-			price := poloPrice(ticker)
-			prices = append(prices, *price)
-		}
-		return nil
-	})
-
-	if bittrexUpdate {
-		initializeBittrex(db)
-	}
-	if poloniexUpdate {
-		initializePoloniex(db)
-	}
-
-	message = *generatePriceMessage(prices, tickerHeader)
 
 	return &message
 }
@@ -548,83 +150,12 @@ func handleMessage(s *discordgo.Session, m *discordgo.MessageCreate) *string {
 		if ticker == "BTC" {
 			message = *btcPrice()
 		} else {
-			message = *otherPrice(&ticker)
+			message = "```Currently only supports BTC price lookups```"
 		}
 		// Delete originating message
 		s.ChannelMessageDelete(m.ChannelID, m.ID)
 
 		message = fmt.Sprintf("%sRequested by: %s", message, m.Author.Mention())
-	case "!pricerefresh":
-		// Refresh coin pairs in Bolt DB
-		initializeBittrex(db)
-		initializePoloniex(db)
-		message = "Exchange pairs refreshed"
-	case "!ubqusd":
-		channelCheck := *checkTradingChannel(m.ChannelID)
-		if channelCheck != "" {
-			message = channelCheck
-			break
-		}
-
-		usageStr := "Usage: !ubqusd [AMOUNT] eg. !ubqusd 10"
-		valueErrStr := fmt.Sprintf("Value error ;_; - %s", usageStr)
-		if len(arguments) < 1 {
-			message = usageStr
-			break
-		}
-
-		amount, err := strconv.ParseFloat(arguments[0], 64)
-		if err != nil {
-			message = valueErrStr
-			break
-		}
-		if amount < 0.1 || amount > 100000000 {
-			message = "ERR: Pick an amount greater than 0.1 an less than 100 million"
-			break
-		}
-
-		// Delete originating message
-		s.ChannelMessageDelete(m.ChannelID, m.ID)
-
-		message = *ubqUSD(&amount)
-		message = fmt.Sprintf("%sRequested by: %s", message, m.Author.Mention())
-	case "!ubqeur":
-		channelCheck := *checkTradingChannel(m.ChannelID)
-		if channelCheck != "" {
-			message = channelCheck
-			break
-		}
-
-		usageStr := "Usage: !ubqeur [AMOUNT] eg. !ubqeur 10"
-		valueErrStr := fmt.Sprintf("Value error ;_; - %s", usageStr)
-		if len(arguments) < 1 {
-			message = usageStr
-			break
-		}
-
-		amount, err := strconv.ParseFloat(arguments[0], 64)
-		if err != nil {
-			message = valueErrStr
-			break
-		}
-		if amount < 0.1 || amount > 100000000 {
-			message = "ERR: Pick an amount greater than 0.1 an less than 100 million"
-			break
-		}
-
-		// Delete originating message
-		s.ChannelMessageDelete(m.ChannelID, m.ID)
-
-		message = *ubqEUR(&amount)
-		message = fmt.Sprintf("%sRequested by: %s", message, m.Author.Mention())
-	case "!ubqlambo":
-		channelCheck := *checkTradingChannel(m.ChannelID)
-		if channelCheck != "" {
-			message = channelCheck
-			break
-		}
-
-		message = *ubqLambo()
 	// Text commands
 	// Keep this in alphabetical order. Where possible just use the singular term.
 	case "!ann", "!backup", "!bots", "!bridge", "!caps", "!commands", "!compare", "!dojo", "!escher", "!escrow", "!ethunits", "!exchange", "!explorer", "!github", "!hide", "!hidechannels", "!invite", "!market", "!miner", "!mp", "!monetarypolicy", "!nft", "!nfts", "!nucleus", "!odin", "!onepage", "!pools", "!quarterly", "!redshift", "!roadmap", "!shinobi", "!site", "!social", "!solidity", "!stats", "!transparency", "!wallet", "!website", "!vyper":
@@ -697,13 +228,6 @@ func main() {
 
 		log.Fatalf("Failed to create config directory: %s", err)
 	}
-
-	// Optionally open database read only
-	db, err = bolt.Open(defaultBoldDBFile, 0600, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
 
 	// Create a new Discord session using the provided bot token.
 	dg, err := discordgo.New("Bot " + token)
@@ -780,6 +304,15 @@ func convertIDtoCreationTime(id string) time.Time {
 	return creationTime
 }
 
+func turdTimer(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
+	if len(m.Roles) == 0 {
+		// Perform actions for users without roles
+		turdMessage := fmt.Sprintf("Smelly turd: <@%s> account Unverified after 24 hours", m.User.ID)
+		s.GuildMemberRoleAdd(m.GuildID, m.User.ID, turdRoleID)
+		s.ChannelMessageSend(floodAlertChannel, turdMessage)
+	}
+}
+
 // This function is called on GuildMemberAdd event
 // Currently just performs Flood handling
 func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
@@ -810,8 +343,8 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	t1 := time.Now()
 	diff := t1.Sub(memberCreationTime)
 	if diff.Hours() < 24*30 {
-		turdMessage := fmt.Sprintf("Smelly turd: <@%s>", m.User.ID)
-		s.GuildMemberRoleAdd(m.GuildID, m.User.ID, turdID)
+		turdMessage := fmt.Sprintf("Smelly turd: <@%s> account created %f hours ago", m.User.ID, diff.Hours())
+		s.GuildMemberRoleAdd(m.GuildID, m.User.ID, turdRoleID)
 		s.ChannelMessageSend(floodAlertChannel, turdMessage)
 	}
 
@@ -832,7 +365,7 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 			// Set TerminatorTimer
 			terminatorTimer := time.NewTicker(terminatorTimerSeconds * time.Second)
 			go func() {
-				floodMessage := fmt.Sprintf("<@&%s> 🚨 Flood detected. %d Joins in %.1f seconds", moderatorID, floodMemberAddInterval, diff.Seconds())
+				floodMessage := fmt.Sprintf("<@&%s> 🚨 Flood detected. %d Joins in %.1f seconds", moderatorRoleID, floodMemberAddInterval, diff.Seconds())
 				s.ChannelMessageSend(floodAlertChannel, floodMessage)
 				<-terminatorTimer.C
 				terminatorMemberFlag = false
@@ -852,4 +385,10 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 			floodStack.PushBack(floodCheck{m.User.ID, time.Now()})
 		}
 	}
+
+	// Run a 24-hour timer for the user, calling turdTimer after 24 hours
+	go func() {
+		time.Sleep(24 * time.Hour)
+		turdTimer(s, m)
+	}()
 }
