@@ -322,19 +322,7 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 		return
 	}
 
-	faqUsernameMatched, _ := regexp.MatchString(`(?i)FAQ`, m.User.Username)
-	helpdeskUsernameMatched, _ := regexp.MatchString(`(?i)Helpdesk`, m.User.Username)
-	supportUsernameMatched, _ := regexp.MatchString(`(?i)Support`, m.User.Username)
-	adminUsernameMatched, _ := regexp.MatchString(`(?i)Admin`, m.User.Username)
-	captchaUsernameMatched, _ := regexp.MatchString(`(?i)[CС][aа][pр]t[cс]h[aа]`, m.User.Username)
-	giveawayUsernameMatched, _ := regexp.MatchString(`(?i)Giveaway`, m.User.Username)
-	mee6UsernameMatched, _ := regexp.MatchString(`(?i)MEE6`, m.User.Username)
-	managerUsernameMatched, _ := regexp.MatchString(`(?i)Manager`, m.User.Username)
-	if (faqUsernameMatched || helpdeskUsernameMatched || supportUsernameMatched ||
-		adminUsernameMatched || captchaUsernameMatched || giveawayUsernameMatched ||
-		mee6UsernameMatched || managerUsernameMatched) &&
-		len(m.Member.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.User.ID, "Username spam")
+	if checkSpamUsername(s, m) {
 		return
 	}
 
@@ -391,4 +379,38 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 		time.Sleep(24 * time.Hour)
 		turdTimer(s, m)
 	}()
+}
+
+// Check if the username matches any of the given patterns
+func isUsernameSpam(username string, patterns []string) bool {
+	for _, pattern := range patterns {
+		matched, _ := regexp.MatchString(pattern, username)
+		if matched {
+			return true
+		}
+	}
+	return false
+}
+
+// Check for spam usernames and terminate member if conditions are met
+func checkSpamUsername(s *discordgo.Session, m *discordgo.GuildMemberAdd) bool {
+	patterns := []string{
+		`(?i)Admin`,
+		`(?i)Announcement`,
+		`(?i)[CС][aа][pр]t[cс]h[aа]`,
+		`(?i)FAQ`,
+		`(?i)Giveaway`,
+		`(?i)Helpdesk`,
+		`(?i)Manager`,
+		`(?i)MEE6`,
+		`(?i)Support`,
+	}
+
+	username := m.User.Username
+	if isUsernameSpam(username, patterns) && len(m.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.User.ID, "Username spam")
+		return true
+	}
+
+	return false
 }

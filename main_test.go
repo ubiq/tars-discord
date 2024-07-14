@@ -33,3 +33,38 @@ func Test_convertIDtoCreationTime(t *testing.T) {
 		})
 	}
 }
+
+func Test_isUsernameSpam(t *testing.T) {
+	patterns := []string{
+		`(?i)Announcement`,
+		`(?i)FAQ`,
+	}
+
+	type args struct {
+		username string
+		patterns []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "Ham - janedoe",
+			args: args{"janedoe", patterns},
+			want: false,
+		},
+		{
+			name: "Spam - announcements23",
+			args: args{"announcements23", patterns},
+			want: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := isUsernameSpam(tt.args.username, tt.args.patterns); got != tt.want {
+				t.Errorf("isUsernameSpam() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
