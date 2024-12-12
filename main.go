@@ -74,13 +74,7 @@ func btcPrice() *string {
 	}
 
 	lastPrice := ticker.Last
-
-	if err != nil {
-		log.Println(err)
-		message = "Error retrieving price from remote API's"
-	} else {
-		message = fmt.Sprintf("```Gemini BTC price: %.2f```", lastPrice)
-	}
+	message = fmt.Sprintf("```Gemini BTC price: %.2f```", lastPrice)
 
 	return &message
 }
@@ -322,7 +316,7 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 		return
 	}
 
-	if checkSpamUsername(s, m) {
+	if checkSpamName(s, m) {
 		return
 	}
 
@@ -381,10 +375,10 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	}()
 }
 
-// Check if the username matches any of the given patterns
-func isUsernameSpam(username string, patterns []string) bool {
+// Check if the name matches any of the given patterns
+func isNameSpam(name string, patterns []string) bool {
 	for _, pattern := range patterns {
-		matched, _ := regexp.MatchString(pattern, username)
+		matched, _ := regexp.MatchString(pattern, name)
 		if matched {
 			return true
 		}
@@ -392,8 +386,8 @@ func isUsernameSpam(username string, patterns []string) bool {
 	return false
 }
 
-// Check for spam usernames and terminate member if conditions are met
-func checkSpamUsername(s *discordgo.Session, m *discordgo.GuildMemberAdd) bool {
+// Check for spam user or display name and terminate member if conditions are met
+func checkSpamName(s *discordgo.Session, m *discordgo.GuildMemberAdd) bool {
 	patterns := []string{
 		`(?i)Admin`,
 		`(?i)Announcement`,
@@ -404,11 +398,13 @@ func checkSpamUsername(s *discordgo.Session, m *discordgo.GuildMemberAdd) bool {
 		`(?i)Manager`,
 		`(?i)MEE6`,
 		`(?i)Support`,
+		`\d{4}$`,
 	}
 
 	username := m.User.Username
-	if isUsernameSpam(username, patterns) && len(m.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.User.ID, "Username spam")
+	displayName := m.User.GlobalName
+	if (isNameSpam(username, patterns) || isNameSpam(displayName, patterns)) && len(m.Roles) == 0 {
+		go terminateMember(s, m.GuildID, m.User.ID, "Name spam")
 		return true
 	}
 

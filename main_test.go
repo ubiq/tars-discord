@@ -38,6 +38,7 @@ func Test_isUsernameSpam(t *testing.T) {
 	patterns := []string{
 		`(?i)Announcement`,
 		`(?i)FAQ`,
+		`\d{4}$`,
 	}
 
 	type args struct {
@@ -59,10 +60,20 @@ func Test_isUsernameSpam(t *testing.T) {
 			args: args{"announcements23", patterns},
 			want: true,
 		},
+		{
+			name: "Spam - spammer1234",
+			args: args{"spammer1234", patterns},
+			want: true,
+		},
+		{
+			name: "Ham - user123",
+			args: args{"user123", patterns},
+			want: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := isUsernameSpam(tt.args.username, tt.args.patterns); got != tt.want {
+			if got := isNameSpam(tt.args.username, tt.args.patterns); got != tt.want {
 				t.Errorf("isUsernameSpam() = %v, want %v", got, tt.want)
 			}
 		})
