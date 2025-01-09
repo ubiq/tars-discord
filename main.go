@@ -279,12 +279,21 @@ type floodCheck struct {
 }
 
 func terminateMember(s *discordgo.Session, guildID string, userID string, reason string) {
-	banUserMessage := fmt.Sprintf("Terminated: <@%s>, Reason: %s", userID, reason)
-	err := s.GuildBanCreateWithReason(guildID, userID, reason, 1)
+	message := fmt.Sprintf("Terminated: <@%s>, Reason: %s", userID, reason)
+	err := s.GuildBanCreateWithReason(guildID, userID, reason, 7)
 	if err != nil {
 		log.Printf("err: +%v\n", err)
 	} else {
-		s.ChannelMessageSend(floodAlertChannel, banUserMessage)
+		s.ChannelMessageSend(floodAlertChannel, message)
+	}
+}
+
+func turdifyMember(s *discordgo.Session, m *discordgo.GuildMemberAdd, reason string) {
+	if len(m.Roles) == 0 {
+		// Perform actions for users without roles
+		message := fmt.Sprintf("Turdified: <@%s>, Reason: %s", m.User.ID, reason)
+		s.GuildMemberRoleAdd(m.GuildID, m.User.ID, turdRoleID)
+		s.ChannelMessageSend(floodAlertChannel, message)
 	}
 }
 
@@ -296,15 +305,6 @@ func convertIDtoCreationTime(id string) time.Time {
 	unixCreationTime := (idInt >> 22) + 1420070400000
 	creationTime := time.Unix(0, unixCreationTime*int64(time.Millisecond))
 	return creationTime
-}
-
-func turdTimer(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
-	if len(m.Roles) == 0 {
-		// Perform actions for users without roles
-		turdMessage := fmt.Sprintf("Smelly turd: <@%s> account Unverified after 24 hours", m.User.ID)
-		s.GuildMemberRoleAdd(m.GuildID, m.User.ID, turdRoleID)
-		s.ChannelMessageSend(floodAlertChannel, turdMessage)
-	}
 }
 
 // This function is called on GuildMemberAdd event
@@ -371,7 +371,7 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 	// Run a 24-hour timer for the user, calling turdTimer after 24 hours
 	go func() {
 		time.Sleep(24 * time.Hour)
-		turdTimer(s, m)
+		turdifyMember(s, m, "Account Unverified after 24 hours")
 	}()
 }
 
@@ -404,7 +404,7 @@ func checkSpamName(s *discordgo.Session, m *discordgo.GuildMemberAdd) bool {
 	username := m.User.Username
 	displayName := m.User.GlobalName
 	if (isNameSpam(username, patterns) || isNameSpam(displayName, patterns)) && len(m.Roles) == 0 {
-		go terminateMember(s, m.GuildID, m.User.ID, "Name spam")
+		go turdifyMember(s, m, "Name spam")
 		return true
 	}
 
