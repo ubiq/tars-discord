@@ -374,39 +374,3 @@ func guildMemberAdd(s *discordgo.Session, m *discordgo.GuildMemberAdd) {
 		turdifyMember(s, m, "Account Unverified after 24 hours")
 	}()
 }
-
-// Check if the name matches any of the given patterns
-func isNameSpam(name string, patterns []string) bool {
-	for _, pattern := range patterns {
-		matched, _ := regexp.MatchString(pattern, name)
-		if matched {
-			return true
-		}
-	}
-	return false
-}
-
-// Check for spam user or display name and terminate member if conditions are met
-func checkSpamName(s *discordgo.Session, m *discordgo.GuildMemberAdd) bool {
-	patterns := []string{
-		`(?i)Admin`,
-		`(?i)Announcement`,
-		`(?i)[CС][aа][pр]t[cс]h[aа]`,
-		`(?i)FAQ`,
-		`(?i)Giveaway`,
-		`(?i)Helpdesk`,
-		`(?i)Manager`,
-		`(?i)MEE6`,
-		`(?i)Support`,
-		`\d{4}$`,
-	}
-
-	username := m.User.Username
-	displayName := m.User.GlobalName
-	if (isNameSpam(username, patterns) || isNameSpam(displayName, patterns)) && len(m.Roles) == 0 {
-		go turdifyMember(s, m, "Name spam")
-		return true
-	}
-
-	return false
-}
