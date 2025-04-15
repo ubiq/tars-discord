@@ -1,6 +1,7 @@
 module github.com/ubiq/tars-discord
 
 go 1.23
+toolchain go1.24.1
 
 require (
 	github.com/bwmarrin/discordgo v0.28.1
@@ -24,7 +25,7 @@ require (
 	github.com/decred/slog v1.2.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
-	golang.org/x/crypto v0.31.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/crypto v0.35.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 	lukechampine.com/blake3 v1.3.0 // indirect
 )
